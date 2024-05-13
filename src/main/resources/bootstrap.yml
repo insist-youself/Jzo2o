@@ -1,0 +1,76 @@
+#################     服务器配置     #################
+server:
+  port: 11509
+  undertow:
+    accesslog:
+      enabled: true
+      pattern: "%t %a &quot;%r&quot; %s (%D ms)"
+      dir: /data/logs/undertow/${spring.application.name}/access-logs/
+  servlet:
+    context-path: /foundations
+
+#################     spring公共配置     #################
+spring:
+  mvc:
+    path-match:
+      matching-strategy: ant_path_matcher
+    format:
+      date: yyyy-MM-dd HH:mm:ss
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  profiles:
+    active: dev
+  application:
+    name: jzo2o-foundations
+  main:
+    # 支持循环依赖注入
+    allow-circular-references: true
+    # bean名相同覆盖
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      username: ${NACOS_USERNAME}
+      password: ${NACOS_PASSWORD}
+      server-addr: ${NACOS_ADDR}
+      discovery:
+        namespace: ${NACOS_NAMESPACE}
+      config:
+        namespace: ${NACOS_NAMESPACE}
+        file-extension: yaml
+        shared-configs: # 共享配置
+          - data-id: shared-redis-cluster.yaml # 共享redis配置
+            refresh: false
+#          - data-id: shared-xxl-job.yaml # xxl-job配置
+#            refresh: false
+#          - data-id: shared-rabbitmq.yaml # rabbitmq配置
+#            refresh: false
+#          - data-id: shared-es.yaml # rabbitmq配置
+#            refresh: false
+          - data-id: shared-mysql.yaml # mysql配置
+            refresh: false
+
+#################     项目独有配置     #################
+mysql:
+  db-name: jzo2o-foundations
+mybatis:
+  mapper-locations: mapper/*.xml
+  type-aliases-package: com.jzo2o.foundations.mapper
+swagger:
+  enable: true
+  package-path: com.jzo2o.foundations.controller
+  title: 家政服务-运营基础服务接口文档
+  description: 用于服务、区域进行管理
+  contact-name: 传智教育·研究院
+  contact-url: http://www.itcast.cn/
+  contact-email: yjy@itcast.cn
+  version: v1.0
+
+
+#################     日志配置     #################
+logging:
+  level:
+    com.jzo2o: debug
+    org.apache.http: info #es请求日志
+feign:
+  enable: true

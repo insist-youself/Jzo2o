@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jzo2o.foundations.mapper.ServeItemMapper">
+
+    <select id="queryList" resultType="com.jzo2o.api.foundations.dto.response.ServeItemResDTO">
+        SELECT
+        item.id,
+        item.code,
+        item.serve_type_id,
+        type.name AS serve_type_name,
+        item.name,
+        item.serve_item_icon,
+        item.img,
+        item.unit,
+        item.description,
+        item.detail_img,
+        item.reference_price,
+        item.sort_num,
+        item.active_status,
+        item.create_time,
+        item.update_time
+        FROM
+        serve_item AS item
+        LEFT JOIN serve_type AS type ON item.serve_type_id = type.id
+        <where>
+            <if test="serveTypeId != null">
+                and item.serve_type_id=#{serveTypeId}
+            </if>
+            <if test="name != null and name != ''">
+                and item.name like concat('%',#{name},'%')
+            </if>
+            <if test="activeStatus != null">
+                and item.active_status=#{activeStatus}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="queryServeItemAndTypeById" resultType="com.jzo2o.api.foundations.dto.response.ServeItemResDTO">
+        SELECT
+            item.id,
+            item.code,
+            item.serve_type_id,
+            type.name AS serve_type_name,
+            item.name,
+            item.serve_item_icon,
+            item.img,
+            item.unit,
+            item.description,
+            item.detail_img,
+            item.reference_price,
+            item.sort_num,
+            item.active_status,
+            item.create_time,
+            item.update_time
+        FROM
+            serve_item AS item
+                LEFT JOIN serve_type AS type ON item.serve_type_id = type.id
+        WHERE
+            item.id = #{id}
+    </select>
+
+
+
+    <select id="queryActiveServeItemCategory" resultMap="ServeItemCategoryMap">
+        SELECT
+            type.id AS serve_type_id,
+            type.`name` AS serve_type_name,
+            item.id AS serve_item_id,
+            item.`name` AS serve_item_name
+        FROM
+            serve_item AS item
+                LEFT JOIN serve_type AS type ON item.serve_type_id = type.id
+        WHERE
+            item.active_status = 2
+        ORDER BY
+            type.sort_num,
+            item.sort_num
+    </select>
+
+    <!--手动的映射-->
+    <resultMap id="ServeItemCategoryMap" type="com.jzo2o.api.foundations.dto.response.ServeTypeCategoryResDTO">
+        <!--id映射主键字段-->
+        <id column="serve_type_id" property="serveTypeId"></id>
+        <!--result映射普通字段-->
+        <result column="serve_type_name" property="serveTypeName"></result>
+
+        <!--column 数据库中的字段名-->
+        <!--property 实体类中对应的属性 该关键字可以省略... -->
+        <!--ofType 是javaType中的单个对象类型-->
+        <collection property="serveItemList" ofType="com.jzo2o.api.foundations.dto.ServeItemSimpleDTO">
+            <id column="serve_item_id" property="serveItemId"></id>
+            <result column="serve_item_name" property="serveItemName"></result>
+        </collection>
+    </resultMap>
+</mapper>
