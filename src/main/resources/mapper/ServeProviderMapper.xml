@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jzo2o.customer.mapper.ServeProviderMapper">
+
+
+    <select id="queryWorkerList" parameterType="com.jzo2o.customer.model.dto.request.ServeProviderPageQueryReqDTO"
+            resultType="com.jzo2o.customer.model.dto.response.ServeProviderListResDTO">
+        SELECT
+        provider.id,
+        provider.`name`,
+        provider.phone,
+        certification.id_card_no as id_number,
+        setting.city_name,
+        setting.can_pick_up,
+        provider.`status`,
+        certification.certification_time
+        FROM
+        serve_provider AS provider
+        LEFT JOIN serve_provider_settings AS setting ON setting.id = provider.id
+        LEFT JOIN worker_certification AS certification ON certification.id = provider.id
+        <where>
+            provider.type = 2
+            AND certification.certification_status = 2
+            <if test="name !=null and name !=''">
+                AND provider.`name` LIKE concat('%',#{name},'%')
+            </if>
+            <if test="phone !=null and phone !=''">
+                AND provider.phone = #{phone}
+            </if>
+            <if test="status !=null">
+                AND provider.status = #{status}
+            </if>
+            <if test="canPickUp !=null">
+                AND setting.can_pick_up = #{canPickUp}
+            </if>
+        </where>
+        ORDER BY certification.certification_time desc
+    </select>
+
+    <select id="queryAgencyList" parameterType="com.jzo2o.customer.model.dto.request.ServeProviderPageQueryReqDTO"
+            resultType="com.jzo2o.customer.model.dto.response.ServeProviderListResDTO">
+        SELECT
+        provider.id,
+        provider.`name`,
+        provider.phone,
+        certification.id_number,
+        setting.city_name,
+        setting.can_pick_up,
+        provider.`status`,
+        certification.certification_time
+        FROM
+        serve_provider AS provider
+        LEFT JOIN serve_provider_settings AS setting ON setting.id = provider.id
+        LEFT JOIN agency_certification AS certification ON certification.id = provider.id
+        <where>
+            provider.type = 3
+            AND certification.certification_status = 2
+            <if test="name !=null and name !=''">
+                AND provider.`name` LIKE concat('%',#{name},'%')
+            </if>
+            <if test="phone !=null and phone !=''">
+                AND provider.phone = #{phone}
+            </if>
+            <if test="status !=null">
+                AND provider.status = #{status}
+            </if>
+            <if test="canPickUp !=null">
+                AND setting.can_pick_up = #{canPickUp}
+            </if>
+        </where>
+        ORDER BY certification.certification_time desc
+    </select>
+
+    <select id="findBasicInformationById" resultMap="ServeProviderBasicInformationMap">
+        SELECT
+            provider.id,
+            provider.type,
+            provider.`name`,
+            provider.phone,
+            provider.`status`,
+            provider.score,
+            settings.can_pick_up,
+            settings.city_name,
+            settings.intention_scope,
+            skill.serve_type_name,
+            skill.serve_item_name
+        FROM
+            serve_provider AS provider
+                LEFT JOIN serve_provider_settings AS settings ON settings.id = provider.id
+                LEFT JOIN serve_skill AS skill ON skill.serve_provider_id = provider.id
+        WHERE
+            provider.id = #{id}
+    </select>
+
+    <!--手动的映射-->
+    <resultMap id="ServeProviderBasicInformationMap" type="com.jzo2o.customer.model.dto.response.ServeProviderBasicInformationResDTO">
+        <!--id映射主键字段-->
+        <id column="id" property="id"></id>
+        <!--result映射普通字段-->
+        <result column="type" property="type"></result>
+        <result column="name" property="name"></result>
+        <result column="phone" property="phone"></result>
+        <result column="status" property="status"></result>
+        <result column="can_pick_up" property="canPickUp"></result>
+        <result column="city_name" property="cityName"></result>
+        <result column="intention_scope" property="intentionScope"></result>
+        <result column="score" property="score"></result>
+
+        <!--column 数据库中的字段名-->
+        <!--property 实体类中对应的属性 该关键字可以省略... -->
+        <!--ofType 是javaType中的单个对象类型-->
+        <collection property="serveSkillSimpleList" ofType="com.jzo2o.customer.model.dto.ServeSkillSimpleDTO">
+            <id column="serve_type_name" property="serveTypeName"></id>
+            <id column="serve_item_name" property="serveItemName"></id>
+        </collection>
+    </resultMap>
+</mapper>
