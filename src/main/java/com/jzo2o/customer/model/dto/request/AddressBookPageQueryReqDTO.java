@@ -15,4 +15,5 @@ import lombok.Data;
 @Data
 @ApiModel("地址薄分页查询请求")
 public class AddressBookPageQueryReqDTO extends PageQueryDTO {
+
 }

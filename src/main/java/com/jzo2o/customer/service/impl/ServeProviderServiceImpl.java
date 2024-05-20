@@ -13,20 +13,15 @@ import com.jzo2o.api.publics.SmsCodeApi;
 import com.jzo2o.common.constants.CommonStatusConstants;
 import com.jzo2o.common.constants.UserType;
 import com.jzo2o.common.enums.EnableStatusEnum;
-import com.jzo2o.common.enums.SmsBussinessTypeEnum;
 import com.jzo2o.common.expcetions.BadRequestException;
+import com.jzo2o.common.expcetions.CommonException;
+import com.jzo2o.common.expcetions.ForbiddenOperationException;
 import com.jzo2o.common.model.PageResult;
-import com.jzo2o.common.utils.BeanUtils;
-import com.jzo2o.common.utils.CollUtils;
-import com.jzo2o.common.utils.IdUtils;
-import com.jzo2o.common.utils.ObjectUtils;
 import com.jzo2o.common.utils.*;
 import com.jzo2o.customer.mapper.ServeProviderMapper;
 import com.jzo2o.customer.model.domain.*;
 import com.jzo2o.customer.model.dto.ServeSkillSimpleDTO;
 import com.jzo2o.customer.model.dto.request.InstitutionRegisterReqDTO;
-import com.jzo2o.customer.model.dto.request.InstitutionResetPasswordReqDTO;
-import com.jzo2o.customer.model.dto.request.ServePickUpReqDTO;
 import com.jzo2o.customer.model.dto.request.ServeProviderPageQueryReqDTO;
 import com.jzo2o.customer.model.dto.response.CertificationStatusDTO;
 import com.jzo2o.customer.model.dto.response.ServeProviderBasicInformationResDTO;
@@ -35,6 +30,7 @@ import com.jzo2o.customer.model.dto.response.ServeProviderListResDTO;
 import com.jzo2o.customer.service.*;
 import com.jzo2o.mvc.utils.UserContext;
 import com.jzo2o.mysql.utils.PageHelperUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,8 +108,10 @@ public class ServeProviderServiceImpl extends ServiceImpl<ServeProviderMapper, S
 
     @Override
     public ServeProvider findByPhoneAndType(String phone, Integer type) {
-        return lambdaQuery().eq(ServeProvider::getPhone, phone)
-                .eq(ServeProvider::getType, type).one();
+//        return lambdaQuery().eq(ServeProvider::getPhone, phone)
+//                .eq(ServeProvider::getType, type).one();
+        return query().eq("phone", phone)
+                .eq("type", type).one();
     }
 
     @Override
@@ -203,6 +201,63 @@ public class ServeProviderServiceImpl extends ServiceImpl<ServeProviderMapper, S
         } else {
             AgencyCertification agencyCertification = agencyCertificationService.getById(providerId);
             return BeanUtil.toBean(agencyCertification,CertificationStatusDTO.class);
+        }
+    }
+
+    @Override
+    public void institutionRegister(InstitutionRegisterReqDTO institutionRegisterReqDTO) {
+        // 数据校验
+        if(StringUtils.isEmpty(institutionRegisterReqDTO.getVerifyCode())){
+            throw new BadRequestException("验证码错误，请重新获取");
+        }
+        //远程调用publics服务校验验证码是否正确
+//        boolean verifyResult = smsCodeApi.verify(institutionRegisterReqDTO.getPhone(), SmsBussinessTypeEnum.SERVE_STAFF_LOGIN, institutionRegisterReqDTO.getVerifyCode()).getIsSuccess();
+//        if(!verifyResult) {
+//            throw new BadRequestException("验证码错误，请重新获取");
+//        }
+        if(!"123456".equals(institutionRegisterReqDTO.getVerifyCode())){
+            throw new BadRequestException("验证码错误，请重新获取");
+        }
+        // 根据手机号和用户类型获取对应机构是否已存在
+        ServeProvider serveProvider = findByPhoneAndType(institutionRegisterReqDTO.getPhone(), UserType.INSTITUTION);
+        // 自动注册
+        if(serveProvider != null) {
+            throw new ForbiddenOperationException("该机构账户已存在，请重新注册");
+        }
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String password = passwordEncoder.encode(institutionRegisterReqDTO.getPassword());
+        add(institutionRegisterReqDTO.getPhone(), UserType.INSTITUTION, password);
+    }
+
+    @Override
+    public void institutionResetPassword(InstitutionRegisterReqDTO institutionRegisterReqDTO) {
+        // 数据校验
+        if(StringUtils.isEmpty(institutionRegisterReqDTO.getVerifyCode())){
+            throw new BadRequestException("验证码错误，请重新获取");
+        }
+        //远程调用publics服务校验验证码是否正确
+//        boolean verifyResult = smsCodeApi.verify(institutionRegisterReqDTO.getPhone(), SmsBussinessTypeEnum.SERVE_STAFF_LOGIN, institutionRegisterReqDTO.getVerifyCode()).getIsSuccess();
+//        if(!verifyResult) {
+//            throw new BadRequestException("验证码错误，请重新获取");
+//        }
+        if(!"123456".equals(institutionRegisterReqDTO.getVerifyCode())){
+            throw new BadRequestException("验证码错误，请重新获取");
+        }
+        // 根据手机号和用户类型获取对应机构是否已存在
+        ServeProvider serveProvider = findByPhoneAndType(institutionRegisterReqDTO.getPhone(), UserType.INSTITUTION);
+        // 自动注册
+        if(ObjectUtil.isNull(serveProvider)) {
+            throw new ForbiddenOperationException("该机构账户不存在，无法更改密码");
+        }
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String password = passwordEncoder.encode(institutionRegisterReqDTO.getPassword());
+
+        boolean update = lambdaUpdate()
+                .eq(ServeProvider::getPhone, institutionRegisterReqDTO.getPhone())
+                .set(ServeProvider::getPassword, password)
+                .update();
+        if(!update) {
+            throw new CommonException("修改密码失败");
         }
     }
 
