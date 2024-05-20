@@ -17,5 +17,10 @@ import java.util.List;
  */
 public interface ServeMapper extends BaseMapper<Serve> {
 
+    /**
+     * 分页查询
+     * @param regionId
+     * @return
+     */
     public List<ServeResDTO> queryServeListByRegionId(@Param("regionId") Long regionId);
 }
