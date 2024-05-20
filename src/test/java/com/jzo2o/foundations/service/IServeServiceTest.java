@@ -15,8 +15,20 @@ import java.util.List;
 @SpringBootTest
 @Slf4j
 class IServeServiceTest {
-//    @Resource
-//    private IServeService serveService;
+    @Resource
+    private IServeService serveService;
+
+    //分页测试
+    @Test
+    public void test_page(){
+        ServePageQueryReqDTO servePageQueryReqDTO = new ServePageQueryReqDTO();
+        servePageQueryReqDTO.setRegionId(1686303222843662337L);
+        servePageQueryReqDTO.setPageNo(1L);
+        servePageQueryReqDTO.setPageSize(3L);
+        PageResult<ServeResDTO> page = serveService.page(servePageQueryReqDTO);
+        log.info("page : {}", page);
+        Assert.notEmpty(page.getList(),"列表为空");
+    }
 
 //    @Test
 //    void listServeItemByCityCode() {
@@ -60,15 +72,5 @@ class IServeServiceTest {
 //    }
 
 
-    //分页测试
-//    @Test
-//    public void test_page(){
-//        ServePageQueryReqDTO servePageQueryReqDTO = new ServePageQueryReqDTO();
-//        servePageQueryReqDTO.setRegionId(1677152267410149378L);
-//        servePageQueryReqDTO.setPageNo(1L);
-//        servePageQueryReqDTO.setPageSize(3L);
-//        PageResult<ServeResDTO> page = serveService.page(servePageQueryReqDTO);
-//        log.info("page : {}", page);
-//        Assert.notEmpty(page.getList(),"列表为空");
-//    }
+
 }
