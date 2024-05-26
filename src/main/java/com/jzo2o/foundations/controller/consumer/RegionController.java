@@ -2,9 +2,11 @@ package com.jzo2o.foundations.controller.consumer;
 
 
 import com.jzo2o.api.foundations.dto.response.RegionSimpleResDTO;
+import com.jzo2o.foundations.constants.RedisConstants;
 import com.jzo2o.foundations.service.IRegionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

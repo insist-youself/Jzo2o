@@ -23,9 +23,7 @@ import com.jzo2o.foundations.service.IConfigRegionService;
 import com.jzo2o.foundations.service.IRegionService;
 import com.jzo2o.foundations.service.IServeService;
 import com.jzo2o.mysql.utils.PageUtils;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -207,7 +205,9 @@ public class RegionServiceImpl extends ServiceImpl<RegionMapper, Region> impleme
      *
      * @return 区域简略列表
      */
+
     @Override
+    @Cacheable(value = RedisConstants.CacheName.JZ_CACHE, key = "'ACTIVE_REGIONS'", cacheManager = RedisConstants.CacheManager.FOREVER)
     public List<RegionSimpleResDTO> queryActiveRegionListCache() {
         return queryActiveRegionList();
     }

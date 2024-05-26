@@ -3,25 +3,101 @@
 <mapper namespace="com.jzo2o.foundations.mapper.ServeMapper">
 
     <select id="queryServeListByRegionId" resultType="com.jzo2o.foundations.model.dto.response.ServeResDTO">
-        SELECT
-            serve.id,
-            serve.sale_status,
-            serve.serve_item_id,
-            item.name AS serve_item_name,
-            item.serve_type_id,
-            serve.region_id,
-            item.reference_price,
-            serve.price,
-            serve.is_hot,
-            serve.create_time,
-            serve.update_time,
-            type.name AS serve_type_name
-        FROM
-            serve
-                inner JOIN serve_item AS item ON serve.serve_item_id = item.id
-                inner JOIN serve_type AS type ON item.serve_type_id = type.id
-        WHERE
-            serve.region_id = #{regionId}
+        SELECT serve.id,
+               serve.sale_status,
+               serve.serve_item_id,
+               item.name AS serve_item_name,
+               item.serve_type_id,
+               serve.region_id,
+               item.reference_price,
+               serve.price,
+               serve.is_hot,
+               serve.create_time,
+               serve.update_time,
+               type.name AS serve_type_name
+        FROM serve
+                 inner JOIN serve_item AS item ON serve.serve_item_id = item.id
+                 inner JOIN serve_type AS type ON item.serve_type_id = type.id
+        WHERE serve.region_id = #{regionId}
+    </select>
+    <select id="findServeIconCategoryByRegionId" resultMap="ServeCategoryMap">
+
+        SELECT type.id serve_type_id,
+               serve.city_code,
+               type.serve_type_icon,
+               item.sort_num serve_item_sort_num,
+               item.name     serve_item_name,
+               item.id       serve_item_id,
+               item.serve_item_icon,
+               serve.id      serve_id,
+               type.name     serve_type_name
+        FROM serve
+                 inner JOIN serve_item AS item ON serve.serve_item_id = item.id
+                 inner JOIN serve_type AS type ON item.serve_type_id = type.id
+        WHERE serve.region_id = #{regionId}
+          and serve.sale_status = 2
+        order by type.sort_num, item.sort_num
     </select>
 
+    <resultMap id="ServeCategoryMap" type="com.jzo2o.foundations.model.dto.response.ServeCategoryResDTO">
+        <id column="serve_type_id" property="serveTypeId"></id>
+        <result column="serve_type_name" property="serveTypeName"></result>
+        <result column="city_code" property="cityCode"></result>
+        <result column="serve_type_icon" property="serveTypeIcon"></result>
+        <collection property="serveResDTOList" ofType="com.jzo2o.foundations.model.dto.response.ServeSimpleResDTO">
+            <id column="serve_id" property="id"></id>
+            <result column="serve_item_id" property="serveItemId"></result>
+            <result column="serve_item_icon" property="serveItemIcon"></result>
+            <result column="serve_item_name" property="serveItemName"></result>
+            <result column="serve_item_sort_num" property="serveItemSortNum"></result>
+        </collection>
+    </resultMap>
+
+    <select id="findServeTypeList"
+            resultType="com.jzo2o.foundations.model.dto.response.ServeAggregationTypeSimpleResDTO">
+        SELECT DISTINCT
+            type.id serve_type_id,
+            type.img serve_type_img,
+            type.sort_num serve_type_sort_num,
+            type.name serve_type_name
+        FROM serve
+                 inner JOIN serve_item AS item ON serve.serve_item_id = item.id
+                 inner JOIN serve_type AS type ON item.serve_type_id = type.id
+        WHERE serve.region_id = #{regionId}
+        ORDER BY type.sort_num
+    </select>
+
+
+    <select id="queryHotServeList"
+            resultType="com.jzo2o.foundations.model.dto.response.ServeAggregationSimpleResDTO">
+        SELECT
+            serve.id,
+            serve.city_code,
+            item.name serve_item_name,
+            item.id serve_item_id,
+            item.unit,
+            item.detail_img,
+            serve.price,
+            item.img serve_item_img
+        FROM serve
+                 inner JOIN serve_item AS item ON serve.serve_item_id = item.id
+        WHERE serve.region_id = #{regionId}
+          and serve.is_hot = 1
+    </select>
+
+    <select id="queryByServeId"
+            resultType="com.jzo2o.foundations.model.dto.response.ServeAggregationSimpleResDTO">
+        SELECT
+            serve.id,
+            serve.city_code,
+            item.name serve_item_name,
+            item.id serve_item_id,
+            item.unit,
+            item.detail_img,
+            serve.price,
+            item.img serve_item_img
+        FROM serve
+                 inner JOIN serve_item AS item ON serve.serve_item_id = item.id
+        WHERE serve.id = #{id};
+    </select>
 </mapper>

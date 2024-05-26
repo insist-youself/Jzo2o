@@ -27,6 +27,7 @@ import com.jzo2o.foundations.service.IServeSyncService;
 import com.jzo2o.mysql.utils.PageHelperUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -105,7 +106,7 @@ public class ServeItemServiceImpl extends ServiceImpl<ServeItemMapper, ServeItem
      */
     @Override
     @Transactional
-    @CachePut(value = RedisConstants.CacheName.SERVE_ITEM, key = "#id", cacheManager = RedisConstants.CacheManager.ONE_DAY)
+    @Cacheable(value = RedisConstants.CacheName.SERVE_ITEM, key = "#id", cacheManager = RedisConstants.CacheManager.ONE_DAY)
     public ServeItem activate(Long id) {
 
         //查询服务项
