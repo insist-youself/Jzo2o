@@ -43,10 +43,10 @@
             <artifactId>jzo2o-knife4j-web</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>com.jzo2o</groupId>-->
-<!--            <artifactId>jzo2o-es</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.jzo2o</groupId>
+            <artifactId>jzo2o-es</artifactId>
+        </dependency>
 
         <!--单元测试-->
         <dependency>
@@ -69,19 +69,19 @@
             <groupId>com.jzo2o</groupId>
             <artifactId>jzo2o-redis</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.jzo2o</groupId>-->
-<!--            <artifactId>jzo2o-canal-sync</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.jzo2o</groupId>
+            <artifactId>jzo2o-canal-sync</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.jzo2o</groupId>
             <artifactId>jzo2o-mysql</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.jzo2o</groupId>-->
-<!--            <artifactId>jzo2o-xxl-job</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.jzo2o</groupId>
+            <artifactId>jzo2o-xxl-job</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

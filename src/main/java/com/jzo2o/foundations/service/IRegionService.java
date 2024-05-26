@@ -71,11 +71,5 @@ public interface IRegionService extends IService<Region> {
      */
     void deactivate(Long id);
 
-    /**
-     * 已开通服务区域列表
-     *
-     * @return 区域简略列表
-     */
-    List<RegionSimpleResDTO> queryActiveRegionListCache();
 
 }

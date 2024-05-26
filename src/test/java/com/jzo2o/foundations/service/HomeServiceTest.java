@@ -27,8 +27,8 @@ import java.util.List;
 
 @SpringBootTest
 class HomeServiceTest {
-//    @Resource
-//    private HomeService homeService;
+    @Resource
+    private HomeService homeService;
 
 //    @Test
 //    void queryServeIconCategoryByCityCodeCache() {
@@ -48,13 +48,13 @@ class HomeServiceTest {
 //        System.out.println(list);
 //    }
 
-//    @Test
-//    public void test_queryServeIconCategoryByRegionIdCache(){
-//
-//        List<ServeCategoryResDTO> serveCategoryResDTOS = homeService.queryServeIconCategoryByRegionIdCache(1686303222843662337L);
-//        System.out.println(serveCategoryResDTOS);
-//
-//    }
+    @Test
+    public void test_queryServeIconCategoryByRegionIdCache(){
+
+        List<ServeCategoryResDTO> serveCategoryResDTOS = homeService.queryServeIconCategoryByRegionIdCache(1686303222843662337L);
+        System.out.println(serveCategoryResDTOS);
+
+    }
 
     @Test
     void test() throws JsonProcessingException {
