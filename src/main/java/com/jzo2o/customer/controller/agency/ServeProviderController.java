@@ -25,7 +25,11 @@ public class ServeProviderController {
     @Resource
     private IServeProviderService serveProviderService;
 
-
+    @PostMapping("/institution/resetPassword")
+    @ApiOperation("机构登录密码重置接口")
+    public void resetPassword(@RequestBody InstitutionResetPasswordReqDTO institutionResetPasswordReqDTO) {
+        serveProviderService.resetPassword(institutionResetPasswordReqDTO);
+    }
 
     @GetMapping("/currentUserInfo")
     @ApiOperation("获取当前用户信息")

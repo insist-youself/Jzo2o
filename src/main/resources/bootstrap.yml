@@ -42,14 +42,14 @@ spring:
         shared-configs: # 共享配置
           - data-id: shared-redis-cluster.yaml # 共享redis集群配置
             refresh: false
-#          - data-id: shared-xxl-job.yaml # xxl-job配置
-#            refresh: false
-#          - data-id: shared-rabbitmq.yaml # rabbitmq配置
-#            refresh: false
+          - data-id: shared-xxl-job.yaml # xxl-job配置
+            refresh: false
+          - data-id: shared-rabbitmq.yaml # rabbitmq配置
+            refresh: false
           - data-id: shared-mysql.yaml # mysql配置
             refresh: false
-#          - data-id: shared-es.yaml # es
-#            refresh: false
+          - data-id: shared-es.yaml # es
+            refresh: false
 
 #################     项目独有配置     #################
 mysql:

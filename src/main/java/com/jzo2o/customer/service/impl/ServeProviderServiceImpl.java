@@ -121,6 +121,16 @@ public class ServeProviderServiceImpl extends ServiceImpl<ServeProviderMapper, S
         return baseMapper.selectById(id);
     }
 
+    @Override
+    public void registerInstitution(InstitutionRegisterReqDTO institutionRegisterReqDTO) {
+        // 1.验证验证码是否匹配
+        boolean verifyResult = smsCodeApi.verify(institutionRegisterReqDTO.getPhone(), SmsBussinessTypeEnum.INSTITION_REGISTER, institutionRegisterReqDTO.getVerifyCode()).getIsSuccess();
+        if (!verifyResult) {
+            throw new BadRequestException("短信验证码校验失败");
+        }
+        // 2.新增机构
+        owner.add(institutionRegisterReqDTO.getPhone(), UserType.INSTITUTION, passwordEncoder.encode(institutionRegisterReqDTO.getPassword()));
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -150,6 +160,74 @@ public class ServeProviderServiceImpl extends ServiceImpl<ServeProviderMapper, S
 
         return serveProvider;
     }
+
+    @Override
+    public void resetPassword(InstitutionResetPasswordReqDTO institutionResetPasswordReqDTO) {
+        // 1.校验
+        // 1.1.校验验证码是否正确
+        boolean verifyResult = smsCodeApi.verify(institutionResetPasswordReqDTO.getPhone(), SmsBussinessTypeEnum.INSTITUTION_RESET_PASSWORD, institutionResetPasswordReqDTO.getVerifyCode()).getIsSuccess();
+        if (!verifyResult) {
+            throw new BadRequestException("短信验证码错误");
+        }
+        // 1.2.校验手机号是否是当前手机号
+        ServeProvider serveProvider = lambdaQuery().eq(ServeProvider::getPhone, institutionResetPasswordReqDTO.getPhone())
+                .one();
+        if (serveProvider == null) {
+            throw new BadRequestException("手机号错误");
+        }
+        // 2.修改密码
+        lambdaUpdate().set(ServeProvider::getPassword, passwordEncoder.encode(institutionResetPasswordReqDTO.getPassword()))
+                .eq(ServeProvider::getId, serveProvider.getId())
+                .update();
+    }
+
+
+
+//    @Override
+//    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+//    public void settingStatus(Long currentUserId) {
+//        ServeProvider serveProvider = baseMapper.selectById(currentUserId);
+//        // 已完成设置
+//        if (serveProvider.getSettingsStatus() == 1) {
+//            return;
+//        }
+//
+//        //获取认证状态
+//        CertificationStatusDTO certificationStatusDTO = getCertificationStatus(serveProvider.getType(), currentUserId);
+//        //获取认证状态
+//        Integer certificationStatus = ObjectUtils.get(certificationStatusDTO,CertificationStatusDTO::getCertificationStatus);
+//        // 校验是否认证通过，不通过return
+//        if (ObjectUtils.notEqual(CertificationStatusEnum.SUCCESS.getStatus(), certificationStatus)) {
+//            return;
+//        }
+//
+//        ServeProviderSettings serveProviderSettings = serveProviderSettingsService.findById(currentUserId);
+//        // 服务范围未设置
+//        if (ObjectUtils.isEmpty(serveProviderSettings.getLon())) {
+//            return;
+//        }
+//        // 未设置过接单状态
+//        if (EnableStatusEnum.UNKNOWAL.equals(serveProviderSettings.getCanPickUp())) {
+//            return;
+//        }
+//        // 未设置过服务技巧
+//        if (serveProviderSettings.getHaveSkill() == 0) {
+//            return;
+//        }
+//
+//        ServeProvider updateServeProvider = new ServeProvider();
+//        updateServeProvider.setSettingsStatus(1);
+//        updateServeProvider.setId(currentUserId);
+//        baseMapper.updateById(updateServeProvider);
+//
+//        ServeProviderSync serveProviderSync =
+//                ServeProviderSync.builder()
+//                        .id(currentUserId)
+//                        .settingStatus(1)
+//                        .build();
+//        serveProviderSyncService.updateById(serveProviderSync);
+//
+//    }
 
     @Override
     public ServeProviderResDTO findServeProviderInfo(Long id) {
@@ -196,7 +274,6 @@ public class ServeProviderServiceImpl extends ServiceImpl<ServeProviderMapper, S
      */
     @Override
     public CertificationStatusDTO getCertificationStatus(Integer userType, Long providerId){
-
         if (ObjectUtil.equal(UserType.WORKER, userType)) {
             WorkerCertification workerCertification = workerCertificationService.getById(providerId);
             return BeanUtil.toBean(workerCertification,CertificationStatusDTO.class);

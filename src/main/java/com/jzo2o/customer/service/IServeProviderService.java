@@ -66,6 +66,12 @@ public interface IServeProviderService extends IService<ServeProvider> {
      */
     ServeProvider findById(Long id);
 
+    /**
+     * 注册机构用户
+     *
+     * @param institutionRegisterReqDTO
+     */
+    void registerInstitution(InstitutionRegisterReqDTO institutionRegisterReqDTO);
 
     /**
      * 新增用户
@@ -75,6 +81,19 @@ public interface IServeProviderService extends IService<ServeProvider> {
      * @param password 机构登录密码
      */
     ServeProvider add(String phone, Integer type, String password);
+
+    /**
+     * 机构密码重置
+     *
+     * @param institutionResetPasswordReqDTO
+     */
+    void resetPassword(InstitutionResetPasswordReqDTO institutionResetPasswordReqDTO);
+
+//    /**
+//     * 校验是否完成首次配置，如果完成则打上标记
+//     * @param currentUserId
+//     */
+//    void settingStatus(Long currentUserId);
 
     ServeProviderResDTO findServeProviderInfo(Long id);
 

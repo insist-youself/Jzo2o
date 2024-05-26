@@ -82,7 +82,7 @@ public class ILoginServiceImpl implements ILoginService {
         if(StringUtils.isEmpty(loginForWorkReqDTO.getVeriryCode())){
             throw new BadRequestException("验证码错误，请重新获取");
         }
-        //远程调用publics服务校验验证码是否正确
+        // 远程调用publics服务校验验证码是否正确
         boolean verifyResult = smsCodeApi.verify(loginForWorkReqDTO.getPhone(), SmsBussinessTypeEnum.SERVE_STAFF_LOGIN, loginForWorkReqDTO.getVeriryCode()).getIsSuccess();
         if(!verifyResult) {
             throw new BadRequestException("验证码错误，请重新获取");
