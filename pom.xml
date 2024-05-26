@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.jzo2o</groupId>
+    <artifactId>jzo2o-orders</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+<!--        <module>jzo2o-orders-seize</module>-->
+        <module>jzo2o-orders-manager</module>
+        <module>jzo2o-orders-base</module>
+<!--        <module>jzo2o-orders-dispatch</module>-->
+<!--        <module>jzo2o-orders-history</module>-->
+
+    </modules>
+
+    <parent>
+        <artifactId>jzo2o-parent</artifactId>
+        <groupId>com.jzo2o</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+</project>
