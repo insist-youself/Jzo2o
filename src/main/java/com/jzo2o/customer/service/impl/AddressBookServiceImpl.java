@@ -176,6 +176,7 @@ public class AddressBookServiceImpl extends ServiceImpl<AddressBookMapper, Addre
     @Override
     public AddressBookResDTO defaultAddress() {
         AddressBook addressBook = lambdaQuery()
+                .eq(AddressBook::getUserId,UserContext.currentUserId())
                 .eq(AddressBook::getIsDefault, 1)
                 .one();
         return BeanUtil.copyProperties(addressBook, AddressBookResDTO.class);

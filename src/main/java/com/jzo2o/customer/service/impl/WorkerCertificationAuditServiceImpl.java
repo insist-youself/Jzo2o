@@ -62,26 +62,12 @@ public class WorkerCertificationAuditServiceImpl extends ServiceImpl<WorkerCerti
         workerCertificationAudit.setAuditStatus(AuditStatusEnum.Unaudited.getStatus());
         if (ObjectUtil.isNotNull(workerCertificationAudit1)) {
             // 如果对应认证信息已经存在，则执行删除操作
-//            workerCertificationAudit.setId(workerCertificationAudit1.getId());
-//            workerCertificationAudit.setAuditorId(null);
-//            workerCertificationAudit.setAuditTime(null);
-//            workerCertificationAudit.setAuditorName(null);
-//            workerCertificationAudit.setRejectReason(null);
-//            boolean update = updateById(workerCertificationAudit);
-//            if (!update) {
-//                throw new CommonException("更新认证信息失败");
-//            }
             baseMapper.deleteById(workerCertificationAudit1.getId());
         }
         // 3.执行认证信息插入
         baseMapper.insert(workerCertificationAudit);
         WorkerCertification workerCertification = workerCertificationMapper.selectById(workerCertificationAudit.getServeProviderId());
         if (ObjectUtil.isNotNull(workerCertification)) {
-//            workerCertification = BeanUtil.copyProperties(workerCertificationAudit, WorkerCertification.class);
-//            workerCertification.setCertificationTime(null);
-//            workerCertification.setId(workerCertificationAudit.getServeProviderId());
-//            workerCertification.setCertificationStatus(CertificationStatusEnum.PROGRESSING.getStatus());
-//            workerCertificationMapper.updateById(workerCertification);
             workerCertificationMapper.deleteById(workerCertification.getId());
         }
         workerCertification = BeanUtil.copyProperties(workerCertificationAudit, WorkerCertification.class);

@@ -62,15 +62,6 @@ public class AgencyCertificationAuditServiceImpl extends ServiceImpl<AgencyCerti
         agencyCertificationAudit.setAuditStatus(AuditStatusEnum.Unaudited.getStatus());
         if (ObjectUtil.isNotNull(agencyCertificationAudit1)) {
             // 如果对应认证信息已经存在，则先删除
-//            agencyCertificationAudit.setId(agencyCertificationAudit1.getId());
-//            agencyCertificationAudit.setAuditorId(null);
-//            agencyCertificationAudit.setAuditTime(null);
-//            agencyCertificationAudit.setAuditorName(null);
-//            agencyCertificationAudit.setRejectReason(null);
-//            boolean update = updateById(agencyCertificationAudit);
-//            if (!update) {
-//                throw new CommonException("更新认证信息失败");
-//            }
             baseMapper.deleteById(agencyCertificationAudit1.getId());
         }
         // 3.执行认证信息插入
@@ -78,11 +69,6 @@ public class AgencyCertificationAuditServiceImpl extends ServiceImpl<AgencyCerti
         // 将对应的机构认证信息插入agency_certification表中
         AgencyCertification agencyCertification = agencyCertificationMapper.selectById(agencyCertificationAudit.getServeProviderId());
         if (ObjectUtil.isNotNull(agencyCertification)) {
-//            agencyCertification = BeanUtil.copyProperties(agencyCertificationAudit, AgencyCertification.class);
-//            agencyCertification.setCertificationTime(null);
-//            agencyCertification.setCertificationStatus(CertificationStatusEnum.PROGRESSING.getStatus());
-//            agencyCertification.setId(agencyCertificationAudit.getServeProviderId());
-//            agencyCertificationMapper.updateById(agencyCertification);
             agencyCertificationMapper.deleteById(agencyCertification.getId());
         }
         agencyCertification = BeanUtil.copyProperties(agencyCertificationAudit, AgencyCertification.class);
