@@ -6,8 +6,10 @@ import com.jzo2o.api.orders.dto.request.OrderCancelReqDTO;
 import com.jzo2o.api.orders.dto.response.OrderResDTO;
 import com.jzo2o.api.orders.dto.response.OrderSimpleResDTO;
 import com.jzo2o.common.model.CurrentUserInfo;
+import com.jzo2o.common.utils.BeanUtils;
 import com.jzo2o.mvc.utils.UserContext;
 import com.jzo2o.orders.manager.model.dto.OrderCancelDTO;
+import com.jzo2o.orders.manager.model.dto.request.OrderServeCancelReqDTO;
 import com.jzo2o.orders.manager.model.dto.request.OrdersPayReqDTO;
 import com.jzo2o.orders.manager.model.dto.request.PlaceOrderReqDTO;
 import com.jzo2o.orders.manager.model.dto.response.OrdersPayResDTO;
@@ -34,6 +36,9 @@ public class ConsumerOrdersController {
     @Resource
     private IOrdersManagerService ordersManagerService;
 
+    @Resource
+    private IOrdersCreateService ordersCreateService;
+
 
     @GetMapping("/{id}")
     @ApiOperation("根据订单id查询")
@@ -43,6 +48,8 @@ public class ConsumerOrdersController {
     public OrderResDTO detail(@PathVariable("id") Long id) {
         return ordersManagerService.getDetail(id);
     }
+
+
     @GetMapping("/consumerQueryList")
     @ApiOperation("订单滚动分页查询")
     @ApiImplicitParams({
@@ -52,5 +59,44 @@ public class ConsumerOrdersController {
     public List<OrderSimpleResDTO> consumerQueryList(@RequestParam(value = "ordersStatus", required = false) Integer ordersStatus,
                                                      @RequestParam(value = "sortBy", required = false) Long sortBy) {
         return ordersManagerService.consumerQueryList(UserContext.currentUserId(), ordersStatus, sortBy);
+    }
+
+
+    @PostMapping("/place")
+    @ApiOperation("下单接口")
+    public PlaceOrderResDTO place(@RequestBody PlaceOrderReqDTO placeOrderReqDTO) {
+
+        PlaceOrderResDTO reqDTO = ordersCreateService.placeOrder(placeOrderReqDTO);
+        return reqDTO;
+    }
+
+    @PutMapping("/pay/{id}")
+    @ApiOperation("订单支付")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "订单id", required = true, dataTypeClass = Long.class)
+    })
+    public OrdersPayResDTO pay(@PathVariable("id") Long id, @RequestBody OrdersPayReqDTO ordersPayReqDTO) {
+        return ordersCreateService.pay(id, ordersPayReqDTO);
+    }
+
+
+    @GetMapping("/pay/{id}/result")
+    @ApiOperation("查询订单支付结果")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "订单id", required = true, dataTypeClass = Long.class)
+    })
+    public OrdersPayResDTO payResult(@PathVariable("id") Long id) {
+        return ordersCreateService.getPayResultFromTradServer(id);
+    }
+
+
+    @PutMapping("/cancel")
+    @ApiOperation("取消订单")
+    public void cancel(@RequestBody OrderCancelReqDTO orderCancelReqDTO) {
+        OrderCancelDTO orderCancelDTO = BeanUtils.toBean(orderCancelReqDTO, OrderCancelDTO.class);
+        orderCancelDTO.setCurrentUserId(UserContext.currentUserId());
+        orderCancelDTO.setCurrentUserName(UserContext.currentUser().getName());
+        orderCancelDTO.setCurrentUserType(UserContext.currentUser().getUserType());
+        ordersManagerService.cancel(orderCancelDTO);
     }
 }
