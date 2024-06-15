@@ -25,4 +25,19 @@ import java.util.List;
 public interface ICouponService extends IService<Coupon> {
 
 
+    /**
+     * 根据活动ID查询优惠券领取记录
+     * @param couponOperationPageQueryReqDTO 运营端优惠券查询模型
+     * @return 优惠券详情信息
+     */
+    PageResult<CouponInfoResDTO> queryByActivityId(CouponOperationPageQueryReqDTO couponOperationPageQueryReqDTO);
+
+    /**
+     * 用户查询自己领取的优惠券
+     * @param userId 用户id
+     * @param status 优惠券状态，1：未使用，2：已使用，3：已过期
+     * @param lastId 上一次查询最后一张优惠券id
+     * @return 优惠券详情
+     */
+    List<CouponInfoResDTO> queryMyCoupon(Long userId, Long status, Long lastId);
 }
