@@ -17,4 +17,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class CouponWriteOffServiceImpl extends ServiceImpl<CouponWriteOffMapper, CouponWriteOff> implements ICouponWriteOffService {
 
+
+    @Override
+    public Integer countByActivityId(Long activityId) {
+        return lambdaQuery().eq(CouponWriteOff::getActivityId, activityId)
+                .count();
+    }
+
 }

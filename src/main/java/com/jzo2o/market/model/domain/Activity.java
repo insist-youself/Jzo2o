@@ -83,7 +83,6 @@ public class Activity implements Serializable {
      * 发放数量，0：表示无限量，其他正数表示最大发放量
      */
     private Integer totalNum;
-
     /**
      * 库存数量
      */

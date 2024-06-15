@@ -24,5 +24,41 @@ import java.util.List;
  */
 public interface ICouponService extends IService<Coupon> {
 
+    /**
+     * 运营端查询同一个活动的优惠券
+     * @param couponOperationPageQueryReqDTO
+     * @return
+     */
+    PageResult<CouponInfoResDTO> queryForPageOfOperation(CouponOperationPageQueryReqDTO couponOperationPageQueryReqDTO);
 
+    /**
+     * 滚动查询用户优惠券列表
+     *
+     * @param lastId 上一批查询最后一条优惠券的id
+     * @param userId 查询用户的id
+     * @param status 优惠券状态
+     * @return 优惠券列表
+     */
+    List<CouponInfoResDTO> queryForList(Long lastId, Long userId, Integer status);
+
+
+
+    /**
+     * 作废指定活动未使用的优惠券
+     * @param activityId
+     */
+    void revoke(Long activityId);
+
+    /**
+     * 统计获取优惠券领取数量
+     *
+     * @param activityId
+     * @return
+     */
+    Integer countReceiveNumByActivityId(Long activityId);
+
+    /**
+     * 过期优惠券处理
+     */
+    void processExpireCoupon();
 }

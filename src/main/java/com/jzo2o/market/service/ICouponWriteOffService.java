@@ -14,4 +14,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface ICouponWriteOffService extends IService<CouponWriteOff> {
 
 
+    /**
+     * 根据获取活动id统计核销量
+     * @param activityId
+     * @return
+     */
+    Integer countByActivityId(Long activityId);
 }

@@ -78,10 +78,10 @@ public class ActivitySaveReqDTO {
         }
         // 发放时间
         if(distributeStartTime.isAfter(distributeEndTime)){
-            throw new BadRequestException("结束时间不能早于开始时间");
+            throw new BadRequestException("发放结束时间不能早于发放开始时间");
         }
-        if(distributeEndTime.isBefore(DateUtils.now())) {
-            throw new BadRequestException("发放时间已过期");
+        if(distributeStartTime.isBefore(DateUtils.now())) {
+            throw new BadRequestException("发放开始时间不能早于当前时间");
         }
     }
 

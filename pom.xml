@@ -75,10 +75,10 @@
             <groupId>com.jzo2o</groupId>
             <artifactId>jzo2o-xxl-job</artifactId>
         </dependency>
-<!--        <dependency>
+        <dependency>
             <groupId>com.jzo2o</groupId>
             <artifactId>jzo2o-seata</artifactId>
-        </dependency>-->
+        </dependency>
     </dependencies>
 
     <build>

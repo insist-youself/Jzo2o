@@ -31,7 +31,6 @@ public class SeizeCouponInfoResDTO implements Serializable {
     private Integer status;
     @ApiModelProperty("优惠券剩余数量")
     private Integer remainNum;
-
     @ApiModelProperty("发放数量")
     private Integer totalNum;
     @ApiModelProperty("库存数量")
