@@ -7,12 +7,15 @@ package com.jzo2o.orders.base.constants;
  * @create 2023/7/28 15:06
  **/
 public class OrderConstants {
+
+    //接入支付系统的业务系统标识
+    public static final String PRODUCT_APP_ID = "jzo2o.orders";
     public static final class Status {
         public static final String NO_PAY = "NO_PAY";
         public static final String DISPATCHING = "DISPATCHING";
         public static final String NO_SERVE = "NO_SERVE";
         public static final String SERVING = "SERVING";
-        public static final String NO_EVALUATION = "NO_EVALUATION";
+//        public static final String NO_EVALUATION = "NO_EVALUATION";
         public static final String FINISHED = "FINISHED";
         public static final String CANCELED = "CANCELED";
         public static final String CHARGEBACK = "CHARGEBACK";
@@ -30,7 +33,7 @@ public class OrderConstants {
         public static final String CLOSE_DISPATCHING_ORDER = "CLOSE_DISPATCHING_ORDER";
         public static final String CLOSE_NO_SERVE_ORDER = "CLOSE_NO_SERVE_ORDER";
         public static final String CLOSE_SERVING_ORDER = "CLOSE_SERVING_ORDER";
-        public static final String CLOSE_NO_EVALUATION_ORDER = "CLOSE_NO_EVALUATION_ORDER";
+//        public static final String CLOSE_NO_EVALUATION_ORDER = "CLOSE_NO_EVALUATION_ORDER";
         public static final String CLOSE_FINISHED_ORDER = "CLOSE_FINISHED_ORDER";
     }
 }

@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    nacos:
+      username: ${NACOS_USERNAME}
+      password: ${NACOS_PASSWORD}
+      server-addr: ${NACOS_ADDR}
+      config:
+        namespace: ${NACOS_NAMESPACE}
+        file-extension: yaml
+      discovery:
+        namespace: ${NACOS_NAMESPACE}
+logging:
+  level:
+    com.jzo2o: debug

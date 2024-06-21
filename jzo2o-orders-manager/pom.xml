@@ -67,7 +67,10 @@
             <groupId>com.jzo2o</groupId>
             <artifactId>jzo2o-redis</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.jzo2o</groupId>
+            <artifactId>jzo2o-sentinel</artifactId>
+        </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

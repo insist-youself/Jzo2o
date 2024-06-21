@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @ComponentScan({"com.jzo2o.orders.base.service","com.jzo2o.orders.base.handler"})
 @MapperScan("com.jzo2o.orders.base.mapper")
-//@Import({OrderStateMachine.class})
+@Import({OrderStateMachine.class})
 @EnableConfigurationProperties({DispatchProperties.class, ExecutorProperties.class})
 public class AutoImportConfiguration {
 }

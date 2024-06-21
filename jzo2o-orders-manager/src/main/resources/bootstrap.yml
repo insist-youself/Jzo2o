@@ -40,15 +40,12 @@ spring:
             refresh: false
           - data-id: shared-es.yaml # es
             refresh: false
-          - data-id: shared-mysql.yaml # mysql配置
+          - data-id: shared-spring-seata.yaml # seata
             refresh: false
-#          - data-id: shared-spring-seata.yaml # seata
-#            refresh: false
 
 
 #################     项目独有配置     #################
-mysql:
-  db-name: jzo2o-orders
+
 mybatis:
   mapper-locations: mapper/*.xml
   type-aliases-package: com.jzo2o.orders.base.mapper

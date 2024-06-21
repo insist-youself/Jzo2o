@@ -25,6 +25,32 @@ import javax.annotation.Resource;
 @Api(tags = "运营端-订单相关接口")
 @RequestMapping("/operation/orders")
 public class OperationOrdersController {
+    @Resource
+    private IOrdersManagerService ordersManagerService;
 
+    @GetMapping("/page")
+    @ApiOperation("订单分页查询")
+    public PageResult<OrderSimpleResDTO> page(OrderPageQueryReqDTO orderPageQueryReqDTO) {
+        return ordersManagerService.operationPageQuery(orderPageQueryReqDTO);
+    }
 
+    @GetMapping("/aggregation/{id}")
+    @ApiOperation("订单详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "订单id", required = true, dataTypeClass = Long.class)
+    })
+    public OperationOrdersDetailResDTO aggregation(@PathVariable("id") Long id) {
+        return ordersManagerService.aggregation(id);
+    }
+
+    @PutMapping("/cancel")
+    @ApiOperation("取消订单")
+    public void cancel(@RequestBody OrderCancelReqDTO orderCancelReqDTO) {
+        OrderCancelDTO orderCancelDTO = BeanUtil.toBean(orderCancelReqDTO, OrderCancelDTO.class);
+        CurrentUserInfo currentUserInfo = UserContext.currentUser();
+        orderCancelDTO.setCurrentUserId(currentUserInfo.getId());
+        orderCancelDTO.setCurrentUserName(currentUserInfo.getName());
+        orderCancelDTO.setCurrentUserType(currentUserInfo.getUserType());
+        ordersManagerService.cancel(orderCancelDTO);
+    }
 }

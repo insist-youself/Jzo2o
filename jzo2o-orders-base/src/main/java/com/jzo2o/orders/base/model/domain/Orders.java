@@ -74,7 +74,7 @@ public class Orders implements Serializable {
     private Long serveId;
 
     /**
-     * 订单状态，0：待支付，100：派单中，200：待服务，300：服务中，400：待评价，500：订单完成，600：已取消，700：已关闭
+     * 订单状态，0：待支付，100：派单中，200：待服务，300：服务中，500：订单完成，600：已取消，700：已关闭
      */
     private Integer ordersStatus;
 
@@ -157,11 +157,20 @@ public class Orders implements Serializable {
      * 评价时间
      */
     private LocalDateTime evaluationTime;
+    /**
+     * 评价状态
+     */
+    private Integer evaluationStatus;
 
     /**
      * 用户端是否展示，1：展示，0：隐藏
      */
     private Integer display;
+
+    /**
+     * 实际服务完成时间
+     */
+    private LocalDateTime realServeEndTime;
 
     /**
      * 排序字段（serve_start_time秒级时间戳+订单id后6位）

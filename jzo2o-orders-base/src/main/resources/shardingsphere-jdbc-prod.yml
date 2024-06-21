@@ -1,0 +1,35 @@
+dataSources:
+  jzo2o-orders:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    jdbcUrl: jdbc:mysql://mysql.yjy-public-zhihuiyanglao-java-prod.svc.cluster.local:20005/jzo2o-orders?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: oX4[oG4?gG7=
+rules:
+  - !TRANSACTION
+    defaultType: BASE
+    providerType: Seata
+  - !SHARDING
+    tables:
+      orders:
+        actualDataNodes: jzo2o-orders.orders
+    # id生成器
+    keyGenerators:
+      snowflake:
+        type: SNOWFLAKE
+  - !BROADCAST
+    tables:
+      - orders_serve
+      - biz_snapshot
+      - breach_record
+      - orders_canceled
+      - orders_refund
+      - orders_dispatch
+      - orders_seize
+      - serve_provider_sync
+      - state_persister
+      - orders_dispatch_receive
+      - undo_log
+      - history_orders_sync
+      - history_orders_serve_sync
+props:
+  sql-show: true

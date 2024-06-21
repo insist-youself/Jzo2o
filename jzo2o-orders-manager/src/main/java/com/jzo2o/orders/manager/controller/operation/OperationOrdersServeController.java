@@ -18,5 +18,12 @@ import javax.annotation.Resource;
 @RequestMapping("/operation/ordersServe")
 public class OperationOrdersServeController {
 
+    @Resource
+    private IOrdersServeManagerService ordersServeManagerService;
 
+    @GetMapping("/pageQueryByServeProvider")
+    @ApiOperation("查询服务人员/机构服务数据")
+    public PageResult<ServeProviderServeResDTO> pageQueryByServeProvider(OrdersServePageQueryByServeProviderReqDTO ordersServePageQueryByCurrentUserReqDTO) {
+        return ordersServeManagerService.pageQueryByServeProvider(ordersServePageQueryByCurrentUserReqDTO);
+    }
 }

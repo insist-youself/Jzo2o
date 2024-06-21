@@ -42,7 +42,7 @@ public class OperationOrdersDetailResDTO {
         @ApiModelProperty("订单id")
         private Long id;
 
-        @ApiModelProperty("订单状态，0：待支付，100：派单中，200：待服务，300：服务中，400：待评价，500：订单完成，600：订单取消，700已关闭")
+        @ApiModelProperty("订单状态，0：待支付，100：派单中，200：待服务，300：服务中，500：订单完成，600：订单取消，700已关闭")
         private Integer ordersStatus;
 
         @ApiModelProperty("服务项名称")
@@ -191,7 +191,7 @@ public class OperationOrdersDetailResDTO {
     @ApiModel("状态节点流转模型")
     @AllArgsConstructor
     public static class OrderProgress {
-        @ApiModelProperty("订单状态，0：待支付，100：派单中，200：待服务，300：服务中，400：待评价，500：订单完成，600：订单取消，700已退单")
+        @ApiModelProperty("订单状态，0：待支付，100：派单中，200：待服务，300：服务中，500：订单完成，600：订单取消，700已退单")
         private Integer status;
 
         @ApiModelProperty("时间")

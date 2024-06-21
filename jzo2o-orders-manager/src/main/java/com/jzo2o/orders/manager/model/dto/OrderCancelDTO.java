@@ -68,4 +68,9 @@ public class OrderCancelDTO {
      * 支付服务交易单号
      */
     private Long tradingOrderNo;
+
+    /**
+     * 实际服务完成时间
+     */
+    private LocalDateTime realServeEndTime;
 }
