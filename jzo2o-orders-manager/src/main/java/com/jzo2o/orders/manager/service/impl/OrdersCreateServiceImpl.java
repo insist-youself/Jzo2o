@@ -8,6 +8,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jzo2o.api.customer.dto.response.AddressBookResDTO;
 import com.jzo2o.api.foundations.ServeApi;
 import com.jzo2o.api.foundations.dto.response.ServeAggregationResDTO;
+import com.jzo2o.api.market.CouponApi;
+import com.jzo2o.api.market.dto.request.CouponUseReqDTO;
+import com.jzo2o.api.market.dto.response.AvailableCouponsResDTO;
+import com.jzo2o.api.market.dto.response.CouponUseResDTO;
 import com.jzo2o.api.trade.NativePayApi;
 import com.jzo2o.api.trade.TradingApi;
 import com.jzo2o.api.trade.dto.request.NativePayReqDTO;
@@ -15,17 +19,16 @@ import com.jzo2o.api.trade.dto.response.NativePayResDTO;
 import com.jzo2o.api.trade.dto.response.TradingResDTO;
 import com.jzo2o.api.trade.enums.PayChannelEnum;
 import com.jzo2o.api.trade.enums.TradingStateEnum;
+import com.jzo2o.common.expcetions.BadRequestException;
 import com.jzo2o.common.expcetions.CommonException;
 import com.jzo2o.common.model.msg.TradeStatusMsg;
 import com.jzo2o.common.utils.BeanUtils;
 import com.jzo2o.common.utils.DateUtils;
 import com.jzo2o.common.utils.NumberUtils;
+import com.jzo2o.common.utils.ObjectUtils;
 import com.jzo2o.mvc.utils.UserContext;
 import com.jzo2o.orders.base.config.OrderStateMachine;
-import com.jzo2o.orders.base.enums.OrderPayStatusEnum;
-import com.jzo2o.orders.base.enums.OrderRefundStatusEnum;
-import com.jzo2o.orders.base.enums.OrderStatusChangeEventEnum;
-import com.jzo2o.orders.base.enums.OrderStatusEnum;
+import com.jzo2o.orders.base.enums.*;
 import com.jzo2o.orders.base.mapper.OrdersMapper;
 import com.jzo2o.orders.base.model.domain.Orders;
 import com.jzo2o.orders.base.model.dto.OrderSnapshotDTO;
@@ -36,6 +39,8 @@ import com.jzo2o.orders.manager.model.dto.response.PlaceOrderResDTO;
 import com.jzo2o.orders.manager.porperties.TradeProperties;
 import com.jzo2o.orders.manager.service.IOrdersCreateService;
 import com.jzo2o.orders.manager.service.client.CustomerClient;
+import com.jzo2o.orders.manager.service.client.MarketClient;
+import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -75,6 +80,9 @@ public class OrdersCreateServiceImpl extends ServiceImpl<OrdersMapper, Orders> i
     private ServeApi serveApi;
 
     @Resource
+    private MarketClient marketClient;
+
+    @Resource
     private TradeProperties tradeProperties;
 
     @Resource
@@ -85,6 +93,33 @@ public class OrdersCreateServiceImpl extends ServiceImpl<OrdersMapper, Orders> i
 
     @Resource
     private OrderStateMachine orderStateMachine;
+
+    @Resource
+    private CouponApi couponApi;
+
+    @Override
+//    @Transactional(rollbackFor = Exception.class)
+    @GlobalTransactional // 开启全局事务
+    public void addWithCoupon(Orders orders, Long couponId) {
+        // 设置优惠券核销参数
+        CouponUseReqDTO couponUseReqDTO = new CouponUseReqDTO();
+        // 优惠券核销
+        couponUseReqDTO.setId(couponId);
+        couponUseReqDTO.setOrdersId(orders.getId());
+        couponUseReqDTO.setTotalAmount(orders.getTotalAmount());
+        // 设置优惠金额
+        CouponUseResDTO couponUseResDTO = couponApi.use(couponUseReqDTO);
+        // 优惠金额 当前默认0
+        orders.setDiscountAmount(couponUseResDTO.getDiscountAmount());
+        // 实付金额 订单总金额 - 优惠金额
+        orders.setRealPayAmount(orders.getTotalAmount().subtract(orders.getDiscountAmount()));
+        // 保存订单
+        ordersCreateService.add(orders);
+
+        // 模拟异常
+//        int i = 1 / 0;
+
+    }
 
     @Override
     public PlaceOrderResDTO placeOrder(PlaceOrderReqDTO placeOrderReqDTO) {
@@ -152,8 +187,14 @@ public class OrdersCreateServiceImpl extends ServiceImpl<OrdersMapper, Orders> i
         //排序字段,根据服务开始时间转为毫秒时间戳+订单后5位
         long sortBy = DateUtils.toEpochMilli(orders.getServeStartTime()) + orders.getId() % 100000;
         orders.setSortBy(sortBy);
-        //保存订单
-        ordersCreateService.add(orders);
+
+        // 设置优惠金额
+        if (ObjectUtils.isNotNull(placeOrderReqDTO.getCouponId())) {
+            ordersCreateService.addWithCoupon(orders,placeOrderReqDTO.getCouponId());
+        } else {
+            //保存订单
+            ordersCreateService.add(orders);
+        }
 
         return new PlaceOrderResDTO(orders.getId());
     }
@@ -348,6 +389,28 @@ public class OrdersCreateServiceImpl extends ServiceImpl<OrdersMapper, Orders> i
                 .last("limit " + count)
                 .list();
         return orders;
+    }
+
+    /**
+     * 获取可用优惠券
+     *
+     * @param serveId 服务id
+     * @param purNum  购买数量
+     * @return 可用优惠券列表
+     */
+    @Override
+    public List<AvailableCouponsResDTO> getCoupons(Long serveId, Integer purNum) {
+        // 1.获取服务
+        ServeAggregationResDTO serveResDTO = serveApi.findById(serveId);
+        if(ObjectUtils.isNull(serveResDTO) || serveResDTO.getSaleStatus() != ServeStatusEnum.SERVING.getStatus()) {
+            throw new BadRequestException("服务不可用");
+        }
+        // 2.计算订单总金额
+        BigDecimal totalAmount = serveResDTO.getPrice().multiply(new BigDecimal(purNum));
+
+        // 3. 调用远程服务获取 优惠券列表
+        List<AvailableCouponsResDTO> available = marketClient.getAvailable(totalAmount);
+        return available;
     }
 
 

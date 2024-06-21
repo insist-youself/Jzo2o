@@ -76,4 +76,11 @@ public interface IOrdersManagerService extends IService<Orders> {
      * @param orderCancelDTO
      */
     void cancelByDispatching(OrderCancelDTO orderCancelDTO);
+
+    /**
+     *  运营端总订单查询
+     * @param orderPageQueryReqDTO 订单处理服务
+     * @return 订单简略响应数据
+     */
+    PageResult<OrderSimpleResDTO> operationQueryList(OrderPageQueryReqDTO orderPageQueryReqDTO);
 }

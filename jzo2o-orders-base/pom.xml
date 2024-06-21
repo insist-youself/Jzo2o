@@ -82,6 +82,10 @@
             <groupId>com.jzo2o</groupId>
             <artifactId>jzo2o-mvc</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jzo2o</groupId>
+            <artifactId>jzo2o-seata</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
