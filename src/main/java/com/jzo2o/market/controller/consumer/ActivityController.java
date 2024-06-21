@@ -24,6 +24,12 @@ public class ActivityController {
     @Resource
     private IActivityService activityService;
 
-
+    @GetMapping("/list")
+    @ApiOperation("用户端抢券列表分页")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "tabType", value = "页面tab类型，1：疯抢中，2：即将开始", required = true, dataTypeClass = Integer.class)})
+    public List<SeizeCouponInfoResDTO> queryForPage(@RequestParam(value = "tabType",required = true) Integer tabType) {
+        return activityService.queryForListFromCache(tabType);
+    }
 
 }

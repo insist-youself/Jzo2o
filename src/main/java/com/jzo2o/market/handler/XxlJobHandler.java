@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
+import java.util.concurrent.ThreadPoolExecutor;
+
 import static com.jzo2o.market.constants.RedisConstants.Formatter.*;
 import static com.jzo2o.market.constants.RedisConstants.RedisKey.COUPON_SEIZE_SYNC_QUEUE_NAME;
 
@@ -26,6 +28,9 @@ public class XxlJobHandler {
 
     @Resource
     private ICouponService couponService;
+
+    @Resource(name="syncThreadPool")
+    private ThreadPoolExecutor threadPoolExecutor;
 
     /**
      * 活动状态修改，
@@ -57,5 +62,27 @@ public class XxlJobHandler {
         }
     }
 
+    /**
+     * 活动预热，整点预热
+     *
+     */
+    @XxlJob("activityPreheat")
+    public void activityPreHeat() {
+        log.info("优惠券活动定时预热...");
+        try {
+            activityService.preHeat();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 抢券同步队列
+     * 10秒一次
+     */
+    @XxlJob("seizeCouponSyncJob")
+    public void seizeCouponSyncJob() {
+        syncManager.start(COUPON_SEIZE_SYNC_QUEUE_NAME, RedisSyncQueueConstants.STORAGE_TYPE_HASH, RedisSyncQueueConstants.MODE_SINGLE,threadPoolExecutor);
+    }
 
 }

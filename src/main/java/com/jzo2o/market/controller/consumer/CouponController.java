@@ -33,4 +33,11 @@ public class CouponController {
         return couponService.queryForList(lastId, UserContext.currentUserId(), status);
     }
 
+
+    @PostMapping("/seize")
+    @ApiOperation("抢券接口")
+    public void seizeCoupon(@RequestBody SeizeCouponReqDTO seizeCouponReqDTO) {
+        couponService.seizeCoupon(seizeCouponReqDTO);
+    }
+
 }

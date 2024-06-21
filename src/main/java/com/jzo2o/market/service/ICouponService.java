@@ -61,4 +61,29 @@ public interface ICouponService extends IService<Coupon> {
      * 过期优惠券处理
      */
     void processExpireCoupon();
+
+    /**
+     * 抢券接口
+     * @param seizeCouponReqDTO
+     */
+    void seizeCoupon(SeizeCouponReqDTO seizeCouponReqDTO);
+
+    /**
+     * 获取可用优惠券列表
+     * @param totalAmount
+     * @return
+     */
+    List<AvailableCouponsResDTO> getAvailable(BigDecimal totalAmount);
+
+    /**
+     * 使用优惠券
+     * @param couponUseReqDTO
+     */
+    CouponUseResDTO use(CouponUseReqDTO couponUseReqDTO);
+
+    /**
+     * 退回优惠券
+     * @param couponUseBackReqDTO
+     */
+    void useBack(CouponUseBackReqDTO couponUseBackReqDTO);
 }
