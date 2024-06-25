@@ -53,7 +53,7 @@ spring:
 
 #################     项目独有配置     #################
 mysql:
-  db-name: jzo2o-customer
+  db-name: jzo2o-customer-all
 mybatis:
   mapper-locations: mapper/*.xml
   type-aliases-package: com.jzo2o.customer.mapper
