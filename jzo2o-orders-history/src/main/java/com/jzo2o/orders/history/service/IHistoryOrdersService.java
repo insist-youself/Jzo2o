@@ -54,4 +54,5 @@ public interface IHistoryOrdersService extends IService<HistoryOrders> {
      * 删除已经迁移完成的订单
      */
     void deleteMigrated();
+
 }

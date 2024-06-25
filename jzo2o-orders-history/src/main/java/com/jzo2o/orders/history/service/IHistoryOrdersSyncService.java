@@ -33,4 +33,7 @@ public interface IHistoryOrdersSyncService extends IService<HistoryOrdersSync> {
      * 根据时间段删除数据
      */
     void deleteBySortTime(LocalDateTime minSortTime, LocalDateTime maxSortTime);
+
+
+
 }

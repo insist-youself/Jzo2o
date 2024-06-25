@@ -502,9 +502,41 @@ public class OrdersManagerServiceImpl extends ServiceImpl<OrdersMapper, Orders> 
     @Override
     public void cancel(OrderCancelDTO orderCancelDTO) {
 
-
+        // 1. 有优惠券金额的回滚优惠券
+        Orders orders = getById(orderCancelDTO.getId());
+        if (ObjectUtils.isNull(orders.getDiscountAmount()) || orders.getDiscountAmount().compareTo(BigDecimal.ZERO) == 0) {
+            //使用本地事务控制即可
+            owner.cancelWithoutCoupon(orderCancelDTO);
+        } else {
+            CouponUseBackReqDTO couponUseBackReqDTO = new CouponUseBackReqDTO();
+            couponUseBackReqDTO.setOrdersId(orderCancelDTO.getId());
+            couponUseBackReqDTO.setUserId(orders.getUserId());
+            //需要取消优惠券核销要使用分布式事务控制
+            owner.cancelWithCoupon(orderCancelDTO, couponUseBackReqDTO);
+        }
     }
 
+    /**
+     * 有优惠券取消订单
+     * @param orderCancelDTO
+     * @param couponUseBackReqDTO
+     */
+    @Override
+    @GlobalTransactional
+    public void cancelWithCoupon(OrderCancelDTO orderCancelDTO, CouponUseBackReqDTO couponUseBackReqDTO) {
+        couponApi.useBack(couponUseBackReqDTO);
+        orderCancelStrategyManager.cancel(orderCancelDTO);
+    }
+
+    /**
+     * 无优惠券取消订单
+     * @param orderCancelDTO
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void cancelWithoutCoupon(OrderCancelDTO orderCancelDTO) {
+        orderCancelStrategyManager.cancel(orderCancelDTO);
+    }
 
 
     /**

@@ -2,6 +2,7 @@ package com.jzo2o.orders.history.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.jzo2o.common.utils.CollUtils;
 import com.jzo2o.common.utils.DateUtils;
 import com.jzo2o.orders.history.model.domain.StatDay;
 import com.jzo2o.orders.history.mapper.StatDayMapper;
@@ -64,6 +65,19 @@ public class StatDayServiceImpl extends ServiceImpl<StatDayMapper, StatDay> impl
 
     @Override
     public void statAndSaveData() {
+        // 1. 数据统计
+        // 15天前时间
+        LocalDateTime statDayLocalDateTime = DateUtils.now().minusDays(15);
+        long statDayTime = DateUtils.getFormatDate(statDayLocalDateTime, "yyyyMMdd");
 
+        // 统计数据
+        List<StatDay> statDays = historyOrdersSyncService.statForDay((int) statDayTime);
+        // 数据保存至按天统计表
+        if (CollUtils.isEmpty(statDays)) {
+            return;
+        }
+
+        // 2. 保存至按天统计表
+        saveOrUpdateBatch(statDays);
     }
 }

@@ -29,8 +29,8 @@ public class StrategyTest {
                 ServeProviderDTO.builder().id(5L).acceptanceNum(1).acceptanceDistance(5).evaluationScore(50).build()
         );
         //获取距离优先策略
-//        IProcessStrategy processStrategy = new DistanceStrategyImpl();
-        IProcessStrategy processStrategy =null;
+        IProcessStrategy processStrategy = new DistanceStrategyImpl();
+//        IProcessStrategy processStrategy =null;
         //通过策略bean进行匹配处理
         ServeProviderDTO precedenceServeProvider = processStrategy.getPrecedenceServeProvider(serveProviderDTOS);
         System.out.println(precedenceServeProvider);

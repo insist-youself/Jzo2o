@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
  * @date 2023/11/24 5:58
  */
 public class DistanceRule extends AbstractProcessRule implements IProcessRule {
-    private IProcessRule next;
+//    private IProcessRule next;
 
     public DistanceRule(IProcessRule next) {
         super(next);
-        this.next = next;
+//        this.next = next;
     }
 
     public List<ServeProviderDTO> doFilter(List<ServeProviderDTO> serveProviderDTOS) {
@@ -38,21 +38,19 @@ public class DistanceRule extends AbstractProcessRule implements IProcessRule {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<ServeProviderDTO> filter(List<ServeProviderDTO> serveProviderDTOS) {
-        List<ServeProviderDTO> result = this.doFilter(serveProviderDTOS);
-        if(CollUtils.size(result) > 1 && next != null) {
-            return next.filter(result);
-        }else {
-            return result;
-        }
-    }
-
-    @Override
-    public IProcessRule next() {
-        return next;
-    }
-
-
+//    @Override
+//    public List<ServeProviderDTO> filter(List<ServeProviderDTO> serveProviderDTOS) {
+//        List<ServeProviderDTO> result = this.doFilter(serveProviderDTOS);
+//        if(CollUtils.size(result) > 1 && next != null) {
+//            return next.filter(result);
+//        }else {
+//            return result;
+//        }
+//    }
+//
+//    @Override
+//    public IProcessRule next() {
+//        return next;
+//    }
 
 }

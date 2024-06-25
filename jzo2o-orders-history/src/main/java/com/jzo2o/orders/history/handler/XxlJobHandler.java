@@ -35,18 +35,19 @@ public class XxlJobHandler {
         //按小时统计保存15天内的订单数据
         statHourService.statAndSaveData();
     }
+
 //    @XxlJob("statAndSaveDataForDay")
 //    public void statAndSaveDataForDay() {
 //        statDayService.statAndSaveData();
 //    }
 
-//    /**
-//     * 按小时统计保存15天内的订单数据
-//     */
-//    @XxlJob("statAndSaveDataForHour")
-//    public void statAndSaveDataForHour() {
-//        statHourService.statAndSaveData();
-//    }
+    /**
+     * 按小时统计保存15天内的订单数据
+     */
+    @XxlJob("statAndSaveDataForHour")
+    public void statAndSaveDataForHour() {
+        statHourService.statAndSaveData();
+    }
 
     /**
      * 迁移HistoryOrdersSync同步表的数据到HistoryOrders历史订单表

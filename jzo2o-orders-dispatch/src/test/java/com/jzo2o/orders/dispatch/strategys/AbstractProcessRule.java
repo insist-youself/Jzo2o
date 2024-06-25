@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 public abstract class AbstractProcessRule implements IProcessRule{
 
     private IProcessRule next;
-
     public AbstractProcessRule(IProcessRule next) {
         this.next = next;
     }

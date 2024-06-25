@@ -33,8 +33,26 @@ public class HistoryOrdersSyncServiceImpl extends ServiceImpl<HistoryOrdersSyncM
 
     @Override
     public List<StatDay> statForDay(Integer statDay) {
-        //todo
-        return Collections.emptyList();
+        // 统计 15 天内的订单
+        List<StatDay> statDays = baseMapper.statForDay(statDay);
+        if (CollUtils.isEmpty(statDays)) {
+            return Collections.emptyList();
+        }
+        // 按天统计订单，计算订单总数，均价等信息
+        List<StatDay> collect = statDays.stream().peek(sd -> {
+            // 订单总数
+            sd.setTotalOrderNum(NumberUtils.add(sd.getCloseOrderNum(), sd.getCancelOrderNum(), sd.getEffectiveOrderNum()).intValue());
+            // 实付订单均价
+            if (sd.getEffectiveOrderNum().compareTo(0) == 0) {
+                sd.setRealPayAveragePrice(BigDecimal.ZERO);
+            } else {
+                // RoundingMode.HALF_DOWN 表示四舍五入 向下舍弃，如2.345，保留两位小数为2.34
+                BigDecimal realPayAveragePrice = sd.getEffectiveOrderTotalAmount().divide(new BigDecimal(sd.getEffectiveOrderNum()), 2, RoundingMode.HALF_DOWN);
+                sd.setRealPayAveragePrice(realPayAveragePrice);
+            }
+        }).collect(Collectors.toList());
+
+        return collect;
     }
 
     @Override

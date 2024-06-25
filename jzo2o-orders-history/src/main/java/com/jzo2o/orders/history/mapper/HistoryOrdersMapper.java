@@ -16,5 +16,8 @@ import java.time.LocalDateTime;
  */
 public interface HistoryOrdersMapper extends BaseMapper<HistoryOrders> {
 
-
+    Integer migrate(@Param("yesterDayStartTime") LocalDateTime yesterDayStartTime,
+                    @Param("yesterDayEndTime") LocalDateTime yesterDayEndTime,
+                    @Param("offset") Integer offset,
+                    @Param("perNum") Integer perNum);
 }

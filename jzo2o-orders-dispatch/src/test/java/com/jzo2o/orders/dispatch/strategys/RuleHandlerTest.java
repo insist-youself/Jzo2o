@@ -15,10 +15,10 @@ import java.util.List;
 public class RuleHandlerTest {
 
     public static void main(String[] args) {
-        IProcessRule ruleChain = null;
+//        IProcessRule ruleChain = null;
         // 策略1：构建责任链,先距离优先，距离相同再判断接单数
-//        IProcessRule rule = new AcceptNumRule(null);
-//        IProcessRule ruleChain = new DistanceRule(rule);
+        IProcessRule rule = new AcceptNumRule(null);
+        IProcessRule ruleChain = new DistanceRule(rule);
         // 策略2：构建责任链,先评分优先，评分相同再判断接单数
 //        IProcessRule rule = new AcceptNumRule(null);
 //        IProcessRule ruleChain = new ScoreRule(rule);

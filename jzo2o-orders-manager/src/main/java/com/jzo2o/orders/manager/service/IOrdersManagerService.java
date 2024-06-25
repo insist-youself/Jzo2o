@@ -139,4 +139,17 @@ public interface IOrdersManagerService extends IService<Orders> {
      * @return 订单列表
      */
     List<Orders> queryDispatchOverTimeOrdersList(Integer count);
+
+    /**
+     * 有优惠券取消订单
+     * @param orderCancelDTO
+     * @param couponUseBackReqDTO
+     */
+    void cancelWithCoupon(OrderCancelDTO orderCancelDTO, CouponUseBackReqDTO couponUseBackReqDTO);
+
+    /**
+     * 无优惠券取消订单
+     * @param orderCancelDTO
+     */
+    void cancelWithoutCoupon(OrderCancelDTO orderCancelDTO);
 }

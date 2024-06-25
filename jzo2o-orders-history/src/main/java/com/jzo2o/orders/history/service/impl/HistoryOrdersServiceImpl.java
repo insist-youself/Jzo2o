@@ -162,7 +162,29 @@ public class HistoryOrdersServiceImpl extends ServiceImpl<HistoryOrdersMapper, H
     @Override
     public void migrate() {
 
+        log.debug("历史订单迁移开始...");
+        // 查询时间开始坐标
+        int offset = 0;
+        int perNum = 1000;
+        // 昨天开始时间
+        LocalDateTime yesterDay = LocalDateTime.now().minusDays(1);
+        LocalDateTime yesterDayStartTime = DateUtils.getDayStartTime(yesterDay);
+        // 昨天结束时间
+        LocalDateTime yesterDayEndTime = DateUtils.getDayEndTime(yesterDay);
+        
+        // 统计迁移数据量
+        Integer total = historyOrdersSyncService.countBySortTime(yesterDayStartTime, yesterDayEndTime);
+        if (total <= 0) {
+            return;
+        }
 
+        // 分批次迁移
+        while (offset < total) {
+            baseMapper.migrate(yesterDayStartTime, yesterDayEndTime,offset, perNum);
+            offset += perNum;
+        }
+
+        log.debug("历史订单迁移结束...");
     }
 
     @Override

@@ -14,4 +14,15 @@
         from history_orders_sync where day >= #{queryDay}
         GROUP BY hour
     </select>
+
+    <select id="statForDay" parameterType="java.util.Map" resultType="com.jzo2o.orders.history.model.domain.StatDay">
+        select day as id,
+               day as statTime,
+               sum(if(orders_status=500,1,0)) effective_order_num,
+               sum(if(orders_status=600,1,0)) cancel_order_num,
+               sum(if(orders_status=700,1,0)) close_order_num,
+               sum(if(orders_status=500,total_amount,0)) effective_order_total_amount
+        from history_orders_sync where day >= #{queryDay}
+        GROUP BY day
+    </select>
 </mapper>

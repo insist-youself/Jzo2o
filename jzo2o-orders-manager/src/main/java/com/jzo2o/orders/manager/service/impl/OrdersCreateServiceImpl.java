@@ -244,7 +244,7 @@ public class OrdersCreateServiceImpl extends ServiceImpl<OrdersMapper, Orders> i
             // 无优惠券下单，走本地事务
             owner.add(orders);
         }
-        //TODO 暂时不需要支付
+        //todo 测试需要默认支付成功
         if (Boolean.FALSE.equals(openPay)) {
             TradeStatusMsg msg = TradeStatusMsg.builder()
                     .productOrderNo(orders.getId())
@@ -253,7 +253,7 @@ public class OrdersCreateServiceImpl extends ServiceImpl<OrdersMapper, Orders> i
                     .tradingOrderNo(IdUtil.getSnowflakeNextId())
                     .transactionId(IdUtils.getSnowflakeNextIdStr())
                     .build();
-            paySuccess(msg);
+            owner.paySuccess(msg);
         }
         return new PlaceOrderResDTO(orders.getId());
     }
