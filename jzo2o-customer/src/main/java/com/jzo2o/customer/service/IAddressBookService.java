@@ -66,13 +66,6 @@ public interface IAddressBookService extends IService<AddressBook> {
      */
     List<AddressBookResDTO> getByUserIdAndCity(Long userId, String cityCode);
 
-    /**
-     * 新增地址簿接口
-     *
-     * @param addressBookUpsertReqDTO
-     * @return
-     */
-    AddressBook add(AddressBookUpsertReqDTO addressBookUpsertReqDTO);
 
 
     /**
@@ -83,11 +76,6 @@ public interface IAddressBookService extends IService<AddressBook> {
      */
     AddressBookResDTO findById(Long id);
 
-    /**
-     * 地址薄分页查询
-     * @return
-     */
-    PageResult<AddressBookResDTO> page(AddressBookPageQueryReqDTO addressBookPageQueryReqDTO);
 
     /**
      * 地址薄修改
@@ -111,9 +99,4 @@ public interface IAddressBookService extends IService<AddressBook> {
      */
     void putDefault(Integer flag, Long id);
 
-    /**
-     * 获取默认地址
-     * @return
-     */
-    AddressBookResDTO defaultAddress();
 }

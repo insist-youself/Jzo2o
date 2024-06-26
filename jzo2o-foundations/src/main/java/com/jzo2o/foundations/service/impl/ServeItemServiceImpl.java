@@ -51,8 +51,7 @@ public class ServeItemServiceImpl extends ServiceImpl<ServeItemMapper, ServeItem
 
     @Resource
     private ServeTypeMapper serveTypeMapper;
-    @Resource
-    private IServeService serveService;
+
     /**
      * 服务项新增
      *
