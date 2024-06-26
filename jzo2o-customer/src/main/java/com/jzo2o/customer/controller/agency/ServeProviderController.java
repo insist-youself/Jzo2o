@@ -2,6 +2,7 @@ package com.jzo2o.customer.controller.agency;
 
 
 import com.jzo2o.customer.model.dto.request.InstitutionRegisterReqDTO;
+import com.jzo2o.customer.model.dto.request.InstitutionResetPasswordReqDTO;
 import com.jzo2o.customer.model.dto.response.ServeProviderInfoResDTO;
 import com.jzo2o.customer.service.IServeProviderService;
 import io.swagger.annotations.Api;

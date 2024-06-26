@@ -1,3 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
- com.jzo2o.mysql.config.MybatisPlusConfiguration,\
- com.jzo2o.mysql.config.PageHelperConfiguration
