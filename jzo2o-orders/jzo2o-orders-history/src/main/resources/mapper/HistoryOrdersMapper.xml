@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jzo2o.orders.history.mapper.HistoryOrdersMapper">
+
+    <insert id="migrate" parameterType="java.util.Map">
+        insert into history_orders (id, user_id, serve_type_id, serve_provider_id, serve_provider_type, serve_item_id, serve_id,
+        city_code, serve_type_name, serve_item_name, serve_item_img, unit, orders_status,
+        pay_status, refund_status, trade_finish_time, trading_channel, third_order_id,
+        dispatch_time, price, pur_num, total_amount, real_pay_amount, third_refund_order_id,
+        canceler_name, discount_amount, serve_address, contacts_phone, contacts_name,
+        serve_provider_staff_name, serve_provider_staff_phone, institution_name, place_order_time,
+        serve_start_time, serve_end_time, real_serve_start_time, real_serve_end_time,
+        serve_before_imgs, serve_before_illustrate, serve_after_imgs, serve_after_illustrate,
+        payment_timeout, lon, lat, pay_time, cancel_time, cancel_reason, year, month, day, hour,
+        sort_time)
+        select hos.id,
+        hos.user_id,
+        hos.serve_type_id,
+        hos.serve_provider_id,
+        hos.serve_provider_type,
+        hos.serve_item_id,
+        hos.serve_id,
+        hos.city_code,
+        hos.serve_type_name,
+        hos.serve_item_name,
+        hos.serve_item_img,
+        hos.unit,
+        hos.orders_status,
+        hos.pay_status,
+        hos.refund_status,
+        hos.trade_finish_time,
+        hos.trading_channel,
+        hos.third_order_id,
+        hos.dispatch_time,
+        hos.price,
+        hos.pur_num,
+        hos.total_amount,
+        hos.real_pay_amount,
+        hos.third_refund_order_id,
+        hos.canceler_name,
+        hos.discount_amount,
+        hos.serve_address,
+        hos.contacts_phone,
+        hos.contacts_name,
+        hos.serve_provider_staff_name,
+        hos.serve_provider_staff_phone,
+        hos.institution_name,
+        hos.place_order_time,
+        hos.serve_start_time,
+        hos.serve_end_time,
+        hos.real_serve_start_time,
+        hos.real_serve_end_time,
+        hos.serve_before_imgs,
+        hos.serve_before_illustrate,
+        hos.serve_after_imgs,
+        hos.serve_after_illustrate,
+        hos.payment_timeout,
+        hos.lon,
+        hos.lat,
+        hos.pay_time,
+        hos.cancel_time,
+        hos.cancel_reason,
+        hos.year,
+        hos.month,
+        hos.day,
+        hos.hour,
+        hos.sort_time
+        from history_orders_sync hos
+        LEFT JOIN history_orders ho on hos.id = ho.id
+        where  <![CDATA[ hos.sort_time >= #{yesterDayStartTime} ]]>
+        and <![CDATA[ hos.sort_time <= #{yesterDayEndTime} ]]>
+        and ho.id is null
+        limit #{offset}, #{perNum}
+    </insert>
+</mapper>

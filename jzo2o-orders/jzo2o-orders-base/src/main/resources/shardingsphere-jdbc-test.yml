@@ -1,0 +1,120 @@
+dataSources:
+  jzo2o-orders-0:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    jdbcUrl: jdbc:mysql://mysql.yjy-public-xzb-java-test.svc.cluster.local:20005/jzo2o-orders-1?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: eD3+qH0|cF5(
+  jzo2o-orders-1:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    jdbcUrl: jdbc:mysql://mysql.yjy-public-xzb-java-test.svc.cluster.local:20005/jzo2o-orders-2?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: eD3+qH0|cF5(
+  jzo2o-orders-2:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    jdbcUrl: jdbc:mysql://mysql.yjy-public-xzb-java-test.svc.cluster.local:20005/jzo2o-orders-3?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: eD3+qH0|cF5(
+rules:
+  - !TRANSACTION
+    defaultType: BASE
+    providerType: Seata
+  - !SHARDING
+    tables:
+      orders:
+        actualDataNodes: jzo2o-orders-${0..2}.orders_${0..2}
+        tableStrategy:
+          standard:
+            shardingColumn: id
+            shardingAlgorithmName: orders_table_inline
+        databaseStrategy:
+          standard:
+            shardingColumn: user_id
+            shardingAlgorithmName: orders_database_inline
+      orders_serve:
+        actualDataNodes: jzo2o-orders-${0..2}.orders_serve_${0..2}
+        tableStrategy:
+          standard:
+            shardingColumn: id
+            shardingAlgorithmName: orders_serve_table_inline
+        databaseStrategy:
+          standard:
+            shardingColumn: serve_provider_id
+            shardingAlgorithmName: orders_serve_database_inline
+      biz_snapshot:
+        actualDataNodes: jzo2o-orders-${0..2}.biz_snapshot_${0..2}
+        tableStrategy:
+          standard:
+            shardingColumn: biz_id
+            shardingAlgorithmName: biz_snapshot_table_inline
+        databaseStrategy:
+          standard:
+            shardingColumn: db_shard_id
+            shardingAlgorithmName: biz_snapshot_database_inline
+    shardingAlgorithms:
+      # 订单-分库算法
+      orders_database_inline:
+        type: INLINE
+        props:
+          # 分库算法表达式
+          algorithm-expression: jzo2o-orders-${user_id % 3}
+          # 分库支持范围查询
+          allow-range-query-with-inline-sharding: true
+      # 订单-分表算法
+      orders_table_inline:
+        type: INLINE
+        props:
+          # 分表算法表达式
+          algorithm-expression: orders_${(int)Math.floor(id % 10000000000 / 15000000)}
+          # 允许范围查询
+          allow-range-query-with-inline-sharding: true
+      # 服务单-分库算法
+      orders_serve_database_inline:
+        type: INLINE
+        props:
+          # 分库算法表达式
+          algorithm-expression: jzo2o-orders-${serve_provider_id % 3}
+          # 允许范围查询
+          allow-range-query-with-inline-sharding: true
+      # 服务单-分表算法
+      orders_serve_table_inline:
+        type: INLINE
+        props:
+          # 允许范围查询
+          algorithm-expression: orders_serve_${(int)Math.floor(id % 10000000000 / 15000000)}
+          # 允许范围查询
+          allow-range-query-with-inline-sharding: true
+      # 快照-分库算法
+      biz_snapshot_database_inline:
+        type: INLINE
+        props:
+          # 分库算法表达式
+          algorithm-expression: jzo2o-orders-${db_shard_id % 3}
+          # 允许范围查询
+          allow-range-query-with-inline-sharding: true
+      # 快照-分表算法
+      biz_snapshot_table_inline:
+        type: INLINE
+        props:
+          # 允许范围查询
+          algorithm-expression: biz_snapshot_${(int)Math.floor((Long.valueOf(biz_id))  % 10000000000 / 15000000)}
+          # 允许范围查询
+          allow-range-query-with-inline-sharding: true
+    # id生成器
+    keyGenerators:
+      snowflake:
+        type: SNOWFLAKE
+  - !BROADCAST
+    tables:
+      - breach_record
+      - orders_canceled
+      - orders_refund
+      - orders_dispatch
+      - orders_seize
+      - serve_provider_sync
+      - state_persister
+      - orders_dispatch_receive
+      - undo_log
+      - history_orders_sync
+      - history_orders_serve_sync
+props:
+  sql-show: true

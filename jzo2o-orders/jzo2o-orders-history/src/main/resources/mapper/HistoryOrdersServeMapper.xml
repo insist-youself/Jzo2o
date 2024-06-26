@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jzo2o.orders.history.mapper.HistoryOrdersServeMapper">
+
+<!--    <insert id="migrate" parameterType="java.util.Map">-->
+<!--        insert into history_orders_serve (id, serve_provider_id, serve_provider_type, institution_staff_id, institution_staff_name, institution_name, orders_origin_type, contacts_name, contacts_phone, serve_address, city_code, serve_type_id, serve_type_name, serve_start_time, serve_item_name, serve_item_id, serve_item_img, serve_status, serve_provider_staff_name, serve_provider_staff_phone, canceler_name, cancel_time, cancel_reason, real_serve_start_time, real_serve_end_time, serve_before_imgs, serve_after_imgs, serve_before_illustrate, serve_after_illustrate, orders_amount, pur_num, serve_num, unit, display, is_deleted, update_by, sort_time)-->
+<!--        (-->
+<!--        select hoss.id,hoss.serve_provider_id,hoss.serve_provider_type,hoss.institution_staff_id,hoss.institution_staff_name,hoss.institution_name,hoss.orders_origin_type,hoss.contacts_name,hoss.contacts_phone,hoss.serve_address,hoss.city_code,hoss.serve_type_id,hoss.serve_type_name,hoss.serve_start_time,hoss.serve_item_name,hoss.serve_item_id,hoss.serve_item_img,hoss.serve_status,hoss.serve_provider_staff_name,hoss.serve_provider_staff_phone,hoss.canceler_name,hoss.cancel_time,hoss.cancel_reason,hoss.real_serve_start_time,hoss.real_serve_end_time,hoss.serve_before_imgs,hoss.serve_after_imgs,hoss.serve_before_illustrate,hoss.serve_after_illustrate,hoss.orders_amount,hoss.pur_num,hoss.serve_num,hoss.unit,hoss.display,hoss.is_deleted,hoss.update_by,hoss.sort_time-->
+<!--        from history_orders_serve_sync hoss LEFT JOIN history_orders_serve hos on hoss.id=hos.id-->
+<!--        where  <![CDATA[ hoss.sort_time <= #{yesterDayEndTime} ]]>-->
+<!--        and hos.id is null-->
+<!--        limit #{offset},#{perNum}-->
+
+<!--        )-->
+<!--    </insert>-->
+    <insert id="migrate" parameterType="java.util.Map">
+        insert into history_orders_serve (id, serve_provider_id, serve_provider_type, institution_staff_id, institution_staff_name, institution_name, orders_origin_type, contacts_name, contacts_phone, serve_address, city_code, serve_type_id, serve_type_name, serve_start_time, serve_item_name, serve_item_id, serve_item_img, serve_status, serve_provider_staff_name, serve_provider_staff_phone, canceler_name, cancel_time, cancel_reason, real_serve_start_time, real_serve_end_time, serve_before_imgs, serve_after_imgs, serve_before_illustrate, serve_after_illustrate, orders_amount, pur_num, serve_num, unit, display, is_deleted, update_by, sort_time)
+        (
+        select hoss.id,hoss.serve_provider_id,hoss.serve_provider_type,hoss.institution_staff_id,hoss.institution_staff_name,hoss.institution_name,hoss.orders_origin_type,hoss.contacts_name,hoss.contacts_phone,hoss.serve_address,hoss.city_code,hoss.serve_type_id,hoss.serve_type_name,hoss.serve_start_time,hoss.serve_item_name,hoss.serve_item_id,hoss.serve_item_img,hoss.serve_status,hoss.serve_provider_staff_name,hoss.serve_provider_staff_phone,hoss.canceler_name,hoss.cancel_time,hoss.cancel_reason,hoss.real_serve_start_time,hoss.real_serve_end_time,hoss.serve_before_imgs,hoss.serve_after_imgs,hoss.serve_before_illustrate,hoss.serve_after_illustrate,hoss.orders_amount,hoss.pur_num,hoss.serve_num,hoss.unit,hoss.display,hoss.is_deleted,hoss.update_by,hoss.sort_time
+        from history_orders_serve_sync hoss LEFT JOIN history_orders_serve hos on hoss.id=hos.id
+        where <![CDATA[ hoss.sort_time >= #{yesterDayStartTime}]]> and <![CDATA[ hoss.sort_time <= #{yesterDayEndTime} ]]>
+        and hos.id is null
+        limit #{offset},#{perNum}
+
+        )
+    </insert>
+</mapper>
