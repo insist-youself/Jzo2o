@@ -8,6 +8,7 @@ import com.jzo2o.common.model.PageResult;
 import com.jzo2o.mvc.utils.UserContext;
 import com.jzo2o.orders.manager.model.dto.request.OrderPageQueryReqDTO;
 import com.jzo2o.orders.manager.model.dto.OrderCancelDTO;
+import com.jzo2o.orders.manager.model.dto.request.OrdersServePageQueryReqDTO;
 import com.jzo2o.orders.manager.model.dto.response.OperationOrdersDetailResDTO;
 import com.jzo2o.orders.manager.service.IOrdersManagerService;
 import io.swagger.annotations.Api;
@@ -26,5 +27,13 @@ import javax.annotation.Resource;
 @RequestMapping("/operation/orders")
 public class OperationOrdersController {
 
+    @Resource
+    private IOrdersManagerService ordersManagerService;
+
+    @GetMapping("/page")
+    @ApiOperation(" 运营端总订单查询")
+    public PageResult<OrderSimpleResDTO> page(OrderPageQueryReqDTO orderPageQueryReqDTO) {
+        return ordersManagerService.operationQueryList(orderPageQueryReqDTO);
+    }
 
 }
