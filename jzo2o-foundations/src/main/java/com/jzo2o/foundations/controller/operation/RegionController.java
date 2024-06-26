@@ -4,6 +4,7 @@ package com.jzo2o.foundations.controller.operation;
 import cn.hutool.core.bean.BeanUtil;
 import com.jzo2o.api.foundations.dto.response.RegionSimpleResDTO;
 import com.jzo2o.common.model.PageResult;
+import com.jzo2o.foundations.constants.RedisConstants;
 import com.jzo2o.foundations.model.domain.Region;
 import com.jzo2o.foundations.model.dto.request.RegionPageQueryReqDTO;
 import com.jzo2o.foundations.model.dto.request.RegionUpsertReqDTO;
@@ -14,6 +15,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,12 +97,19 @@ public class RegionController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "区域id", required = true, dataTypeClass = Long.class),
     })
+    @CacheEvict(value = RedisConstants.CacheName.JZ_CACHE, key = "'ACTIVE_REGIONS'")
     public void activate(@PathVariable("id") Long id) {
         regionService.active(id);
     }
 
     @PutMapping("/deactivate/{id}")
     @ApiOperation("区域禁用")
+    @Caching( evict = {
+            @CacheEvict(value = RedisConstants.CacheName.JZ_CACHE, key = "'ACTIVE_REGIONS'"),
+            @CacheEvict(value = RedisConstants.CacheName.SERVE_ICON, key = "#id"),
+            @CacheEvict(value = RedisConstants.CacheName.SERVE_TYPE, key = "#id"),
+            @CacheEvict(value = RedisConstants.CacheName.HOT_SERVE, key = "#id"),
+    })
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "区域id", required = true, dataTypeClass = Long.class),
     })
