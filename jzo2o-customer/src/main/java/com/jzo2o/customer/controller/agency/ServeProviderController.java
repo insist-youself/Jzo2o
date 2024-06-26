@@ -1,0 +1,49 @@
+package com.jzo2o.customer.controller.agency;
+
+
+import com.jzo2o.customer.model.dto.request.InstitutionRegisterReqDTO;
+import com.jzo2o.customer.model.dto.response.ServeProviderInfoResDTO;
+import com.jzo2o.customer.service.IServeProviderService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+
+/**
+ * <p>
+ * 服务人员/机构表 前端控制器
+ * </p>
+ *
+ * @author itcast
+ * @since 2023-07-17
+ */
+@RestController("agencyServeProviderController")
+@RequestMapping("/agency/serve-provider")
+@Api(tags = "机构端 - 服务人员或机构相关接口")
+public class ServeProviderController {
+    @Resource
+    private IServeProviderService serveProviderService;
+
+    @PostMapping("/institution/resetPassword")
+    @ApiOperation("机构登录密码重置接口")
+    public void resetPassword(@RequestBody InstitutionResetPasswordReqDTO institutionResetPasswordReqDTO) {
+        serveProviderService.resetPassword(institutionResetPasswordReqDTO);
+    }
+
+    @GetMapping("/currentUserInfo")
+    @ApiOperation("获取当前用户信息")
+    public ServeProviderInfoResDTO currentUserInfo() {
+        return serveProviderService.currentUserInfo();
+    }
+
+
+    @PostMapping("/institution/resetPassword")
+    @ApiOperation("机构登录密码重置")
+    public void institutionResetPassword(@RequestBody InstitutionRegisterReqDTO institutionRegisterReqDTO) {
+        serveProviderService.institutionResetPassword(institutionRegisterReqDTO);
+    }
+
+}
+
+
