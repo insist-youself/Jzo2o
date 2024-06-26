@@ -1,0 +1,118 @@
+server:
+  port: 11500  #端口
+  tomcat:
+    uri-encoding: UTF-8   #服务编码
+spring:
+  profiles:
+    active: dev
+  application:
+    name: jzo2o-gateway
+  cloud:
+    nacos:
+      config:
+        file-extension: yaml
+        shared-configs: # 共享配置
+          - data-id: shared-spring.yaml # 共享spring配置
+            refresh: false
+          - data-id: shared-redis.yaml # 共享redis配置
+            refresh: false
+          - data-id: shared-logs.yaml # 共享日志配置
+            refresh: false
+    gateway:
+      routes:
+        # 运营端专用，供路由转发
+        - id: foundations
+          uri: lb://jzo2o-foundations
+          predicates:
+            - Path=/foundations/**
+          filters:
+            - Token
+        - id: orders-dispatch
+          uri: lb://jzo2o-orders-dispatch
+          predicates:
+            - Path=/orders-dispatch/**
+          filters:
+            - Token
+        - id: orders-seize
+          uri: lb://jzo2o-orders-seize
+          predicates:
+            - Path=/orders-seize/**
+          filters:
+            - Token
+        - id: orders-manager
+          uri: lb://jzo2o-orders-manager
+          predicates:
+            - Path=/orders-manager/**
+          filters:
+            - Token
+        - id: orders-history
+          uri: lb://jzo2o-orders-history
+          predicates:
+            - Path=/orders-history/**
+          filters:
+            - Token
+        - id: publics
+          uri: lb://jzo2o-publics
+          predicates:
+            - Path=/publics/**
+          filters:
+            - Token
+        - id: customer
+          uri: lb://jzo2o-customer
+          predicates:
+            - Path=/customer/**
+          filters:
+            - Token
+        - id: trade
+          uri: lb://jzo2o-trade
+          predicates:
+            - Path=/trade/**
+          filters:
+            - Token
+        - id: market
+          uri: lb://jzo2o-market
+          predicates:
+            - Path=/market/**
+          filters:
+            - Token
+        - id: health
+          uri: lb://jzo2o-health
+          predicates:
+            - Path=/health/**
+      globalcors: # 全局的跨域处理
+        add-to-simple-url-handler-mapping: true # 解决options请求被拦截问题
+        corsConfigurations:
+          '[/**]':
+            allowedOriginPatterns: # 允许哪些网站的跨域请求
+              - "*"
+            allowedMethods: # 允许的跨域ajax的请求方式
+              - "GET"
+              - "POST"
+              - "DELETE"
+              - "PUT"
+              - "OPTIONS"
+            allowedHeaders: "*" # 允许在请求中携带的头信息
+            allowCredentials: true # 是否允许携带cookie
+            maxAge: 360000 # 这次跨域检测的有效期
+
+logging:
+  level:
+    com.jzo2o: debug
+jzo2o:
+  access-path-white-list:
+    - /foundations/open/login
+    - /customer/open/login/worker
+    - /customer/open/login/common/user
+    - /customer/open/serve-provider/institution/register
+    - /v3/api-docs/swagger-config
+    - /doc.html
+    - /operation/v2/api-docs
+    - /orders-dispatch/v2/api-docs
+    - /orders-manager/v2/api-docs
+    - /orders-seize/v2/api-docs
+    - /foundations/v2/api-docs
+    - /publics/v2/api-docs
+    - /publics/sms-code/send
+    - /customer/agency/serve-provider/institution/resetPassword
+    - /trade/open/notify/wx/1561414331
+    - /trade/open/notify/alipay/2088241317544335
