@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>jzo2o-orders</artifactId>
+        <groupId>com.jzo2o</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>jzo2o-orders-base</artifactId>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.jzo2o</groupId>
+            <artifactId>jzo2o-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jzo2o</groupId>
+            <artifactId>jzo2o-mysql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jzo2o</groupId>
+            <artifactId>jzo2o-redis</artifactId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.jzo2o</groupId>-->
+<!--            <artifactId>jzo2o-shardingsphere-jdbc</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.jzo2o</groupId>-->
+<!--            <artifactId>jzo2o-api</artifactId>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>com.alibaba.cloud</groupId>-->
+<!--                    <artifactId>spring-cloud-alibaba-sentinel</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>com.jzo2o</groupId>
+            <artifactId>jzo2o-canal-sync</artifactId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.jzo2o</groupId>-->
+<!--            <artifactId>jzo2o-statemachine</artifactId>-->
+<!--            <version>1.0-SNAPSHOT</version>-->
+<!--        </dependency>-->
+        <!--seata-->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>-->
+<!--            <exclusions>-->
+<!--                &lt;!&ndash;版本较低，1.4.2，因此排除&ndash;&gt;-->
+<!--                <exclusion>-->
+<!--                    <artifactId>seata-spring-boot-starter</artifactId>-->
+<!--                    <groupId>io.seata</groupId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <artifactId>seata-spring-boot-starter</artifactId>-->
+<!--            <groupId>io.seata</groupId>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.antlr</groupId>-->
+<!--                    <artifactId>antlr4</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jzo2o</groupId>
+            <artifactId>jzo2o-mvc</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>
