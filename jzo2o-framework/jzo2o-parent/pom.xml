@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+
+    <modules>
+        <module>../jzo2o-common</module>
+        <module>../jzo2o-mysql</module>
+        <module>../jzo2o-knife4j-web</module>
+        <module>../jzo2o-xxl-job</module>
+        <module>../jzo2o-mvc</module>
+        <module>../jzo2o-redis</module>
+        <module>../jzo2o-thirdparty</module>
+        <module>../jzo2o-es</module>
+        <module>../jzo2o-rabbitmq</module>
+        <module>../jzo2o-statemachine</module>
+        <module>../jzo2o-shardingsphere-jdbc</module>
+        <module>../jzo2o-canal-sync</module>
+        <module>../jzo2o-seata</module>
+        <module>../jzo2o-sentinel</module>
+    </modules>
+
+    <groupId>com.jzo2o</groupId>
+    <artifactId>jzo2o-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>jzo2o-parent</name>
+    <description>家政o2o父项目，用于管理依赖版本</description>
+    <properties>
+        <!-- 文件拷贝时的编码 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- 编译时的编码 -->
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <java.version>11</java.version>
+        <jzo2o.version>1.0-SNAPSHOT</jzo2o.version>
+        <lombok.version>1.18.26</lombok.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <hutool.version>5.7.18</hutool.version>
+        <mybatis-plus.version>3.4.3</mybatis-plus.version>
+        <spring-boot.version>2.7.10</spring-boot.version>
+        <gateway.version>3.1.1</gateway.version>
+        <spring-cloud.version>2021.0.4</spring-cloud.version>
+        <spring-cloud-alibaba.version>2021.0.1.0</spring-cloud-alibaba.version>
+        <swagger.version>3.0.3</swagger.version>
+        <swagger-annotations.version>1.5.22</swagger-annotations.version>
+        <reddsion.version>3.17.7</reddsion.version>
+        <aspectj.version>1.9.8.M1</aspectj.version>
+        <servlet-api.version>4.0.1</servlet-api.version>
+        <validator.version>6.0.18.Final</validator.version>
+<!--        <validator.version>8.0.0.CR1</validator.version>-->
+        <es.version>7.17.7</es.version>
+        <jackson.version>2.14.2</jackson.version>
+        <jakarta.json-ai.version>2.0.1</jakarta.json-ai.version>
+        <pagehelper.version>5.1.11</pagehelper.version>
+        <canal.version>1.1.5</canal.version>
+        <shardingsphere-jdbc.version>5.4.0</shardingsphere-jdbc.version>
+        <snakeyaml.version>1.33</snakeyaml.version>
+        <statemachine-redis.version>1.2.14.RELEASE</statemachine-redis.version>
+        <statemachine-core.version>2.5.1</statemachine-core.version>
+        <xxl-job.version>2.3.0</xxl-job.version>
+        <knife4j-gateway.version>4.2.0</knife4j-gateway.version>
+        <seata-version>1.5.2</seata-version>
+        <antlr.verison>3.5.3</antlr.verison>
+        <easyexcel.verison>3.2.0</easyexcel.verison>
+        <sentinel.version>1.8.5</sentinel.version>
+    </properties>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.10</version>
+    </parent>
+
+    <dependencies>
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+        <!--日志-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--alibaba 相关依赖-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>2021.0.4.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
+                <version>2021.0.4.0</version>
+            </dependency>
+
+            <!--mybatis-plus 相关依赖-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-core</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-extension</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <!--spring-boot相关依赖-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <!-- spring-cloud相关依赖 -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--spring cloud alibaba 服务注册-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+            </dependency>
+            <!--spring cloud alibaba-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+            </dependency>
+            <!--swagger knife4j-->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-gateway-spring-boot-starter</artifactId>
+                <version>${knife4j-gateway.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger-annotations.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.redisson/redisson -->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${reddsion.version}</version>
+            </dependency>
+            <!--es-->
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-high-level-client</artifactId>
+                <version>${es.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>co.elastic.clients</groupId>
+                <artifactId>elasticsearch-java</artifactId>
+                <version>${es.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspectj.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>${servlet-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${validator.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+
+            <!--hutool工具-->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.json</groupId>
+                <artifactId>jakarta.json-api</artifactId>
+                <version>${jakarta.json-ai.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper</artifactId>
+                <version>${pagehelper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.otter</groupId>
+                <artifactId>canal.client</artifactId>
+                <version>${canal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.otter</groupId>
+                <artifactId>canal.protocol</artifactId>
+                <version>${canal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-jdbc-core</artifactId>
+                <version>${shardingsphere-jdbc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-cluster-mode-repository-nacos</artifactId>
+                <version>${shardingsphere-jdbc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyaml.version}</version>
+            </dependency>
+
+            <!-- 状态机相关依赖  -->
+            <dependency>
+                <groupId>org.springframework.statemachine</groupId>
+                <artifactId>spring-statemachine-redis</artifactId>
+                <version>${statemachine-redis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.statemachine</groupId>
+                <artifactId>spring-statemachine-core</artifactId>
+                <version>${statemachine-core.version}</version>
+            </dependency>
+
+            <!-- alibaba sentinel-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-sentinel-datasource</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.csp</groupId>
+                <artifactId>sentinel-datasource-nacos</artifactId>
+                <version>${sentinel.version}</version>
+            </dependency>
+
+            <!--xxl调度任务工具包-->
+            <dependency>
+                <groupId>com.xuxueli</groupId>
+                <artifactId>xxl-job-core</artifactId>
+                <version>${xxl-job.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-api</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-common</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-knife4j-web</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-es</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-mvc</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-mysql</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-rabbitmq</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-redis</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-shardingsphere-jdbc</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-thirdparty</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-xxl-job</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-canal-sync</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-statemachine</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-orders-base</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-knife4j-gateway</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-seata</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-cache</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>seata-spring-boot-starter</artifactId>
+                <groupId>io.seata</groupId>
+                <version>${seata-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr</artifactId>
+                <version>${antlr.verison}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.verison}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jzo2o</groupId>
+                <artifactId>jzo2o-sentinel</artifactId>
+                <version>${jzo2o.version}</version>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <source>11</source> <!-- depending on your project -->
+                        <target>11</target> <!-- depending on your project -->
+                    </configuration>
+                </plugin>
+                <!-- maven 打包时跳过测试 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+
+
+</project>

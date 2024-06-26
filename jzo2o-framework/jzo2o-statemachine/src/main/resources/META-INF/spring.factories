@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.jzo2o.statemachine.config.StateConfiguration
+
+  

@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.jzo2o.mvc.config.FilterConfiguration, \
+  com.jzo2o.mvc.config.JsonConfig, \
+  com.jzo2o.mvc.config.MvcConfig, \
+com.jzo2o.mvc.config.AutoConfiguration
