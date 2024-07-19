@@ -10,10 +10,10 @@
   <img src="https://jzo2o-oss-001.oss-cn-hangzhou.aliyuncs.com/Jzo2o/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-19%20161255.jpg"  alt=""/>
 - 服务人员端（app）
 
-  <img src="https://jzo2o-oss-001.oss-cn-hangzhou.aliyuncs.com/Jzo2o/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-19%20160323.jpg"  height="500"  alt=""/>
+  <img src="https://jzo2o-oss-001.oss-cn-hangzhou.aliyuncs.com/Jzo2o/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-19%20160323.jpg"  height="400"  alt=""/>
 - 用户端（小程序）
 
-  <img src="https://jzo2o-oss-001.oss-cn-hangzhou.aliyuncs.com/Jzo2o/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-19%20161705.jpg"  height="500"  alt=""/>
+  <img src="https://jzo2o-oss-001.oss-cn-hangzhou.aliyuncs.com/Jzo2o/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-19%20161705.jpg"  height="400"  alt=""/>
   
 
 ## 项目目录
